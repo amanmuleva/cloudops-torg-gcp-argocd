@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apps-{{ .Values.env }}-apps
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.appProject }}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  sources:
+
+# Source of app for the proj-prod-apps
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-prod-apps
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+# Source of app for the proj-prod-app
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-prod-app
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+# Source of app for the proj-web-apps
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-web-apps
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
