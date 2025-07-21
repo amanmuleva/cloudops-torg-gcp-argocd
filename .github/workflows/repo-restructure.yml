@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'fldr-cf.yaml'
 
 jobs:
   automate_job:
