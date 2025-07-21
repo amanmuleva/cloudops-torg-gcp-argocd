@@ -2,7 +2,6 @@ import os
 import yaml
 import shutil
 import sys
-from deepdiff import DeepDiff
 
 def create_the_template(folder_name, SUB_FOLDER, TEMPLATE_DIR, BASE_PATH):
     # This logic checks if the prefix of the fldr so we can determine where the fldr needs to be created
