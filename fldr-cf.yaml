@@ -2,8 +2,8 @@ fldr-cf:
 - fldr-apps:
   - proj-prod-app: []
   - proj-web-apps: []
+  - proj-dev-app: []
   - proj-prod-apps: []
-  - proj-dev-app:
 - fldr-commercial:
   - proj-nahmed-sbox: []
   - proj-nsarabu-sbox: []
