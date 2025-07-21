@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: commercial-{{ .Values.env }}-apps
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.appProject }}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  sources:
+    # Source of app for the proj-sbawane-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-sbawane-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+    # Source of app for the proj-nahmed-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-nahmed-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+
+    # Source of app for the proj-nsarabu-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-nsarabu-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+    # Source of app for the proj-rdwarkha-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-rdwarkha-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main

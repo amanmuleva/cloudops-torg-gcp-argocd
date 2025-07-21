@@ -1,0 +1,28 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy to GCF
+  args:
+  - functions
+  - deploy
+  - $_FUNCTION_NAME
+  - --gen2
+  - --serve-all-traffic-latest-revision
+  - --region=$_LOCATION
+  - --trigger-location=$_LOCATION
+  - --source=$_SOURCE
+  - --runtime=$_RUNTIME
+  - --entry-point=$_ENTRY_POINT
+  - --service-account=${_GCF_SA}
+  - --build-service-account=projects/${PROJECT_ID}/serviceAccounts/${_GCF_SA}
+  - --run-service-account=${_GCR_SA}
+  - --cpu=$_CPU
+  - --memory=$_MEMORY
+  - --no-allow-unauthenticated
+  - --max-instances=$_MAX_INSTANCES
+  - --timeout=$_TIMEOUT_SECONDS
+  - --ingress-settings=internal-and-gclb
+  - --env-vars-file=$_ENV_VARS_FILE
+  - --trigger-http
+timeout: 1200s
+options:
+  logging: CLOUD_LOGGING_ONLY 

@@ -1,0 +1,96 @@
+env: dev
+configValues: |
+
+  providerConfigName: commercial-dev-config
+  billingAccountId: 00CD44-0B2D32-2F1E33
+  namespace: commercial-dev
+
+  project:
+  - name: proj-nahmed-sbox
+    projectId: proj-nahmed-sbox-torg-dev
+    autoCreateNetwork: false
+    folderName: fldr-commercial-dev
+    projectName: proj-nahmed-sbox
+    #enableExternalName: true
+    projectLabels:
+      business_unit: sbox
+      platform: na
+      service: sbox
+      application: sbox
+      environment: dev
+      product: sbox
+      owner_email: nasir-dot-ahmed-at-vonage-dot-com
+      support_group_email: cloud-ops-at-vonage-dot-com
+      support_group_slack: cloudops
+      opsgenie_contact: cloudops
+      department: cloudops
+      cost_center: 765
+      vsa_uspr_classified: yes
+      vsa_pe_classified: yes
+      vsa_noc_classified: yes
+      vsa_dci_classified: yes
+      vsa_sc_classified: yes
+      compliancy_code: unknown
+      ipsanction_policy: false
+      ca_scope_1: global_us-east4_us-east5
+      ca_scope: na
+      priority: true
+
+  projectServices:
+  - name: proj-nahmed-sbox-enable-apis
+    disableOnDestroy: false
+    disableDependentServices: false
+    projectName: proj-nahmed-sbox
+    services:
+    - billingbudgets.googleapis.com
+    - firewallinsights.googleapis.com
+    - networkmanagement.googleapis.com
+    - networksecurity.googleapis.com
+
+  notificationChannels:
+  - name: cloudops-team-nahmed-torg-dev
+    emailAddress: nasir.ahmed@vonage.com
+    projectId: proj-nahmed-sbox-torg-dev
+
+  projectIAMCustomRoles:
+  - roleName: testRole02
+    stage: GA
+    title: test-role-02
+    permissions: ['resourcemanager.projects.getIamPolicy']
+    resourceDeletionPolicy: Delete
+    project: proj-nahmed-sbox-torg-dev
+  
+  projectIAM:
+  - name: proj-nahmed-sbox-roles-guru
+    userEmail: guruprasad.reddy@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "editor"
+      role: "roles/editor"
+      resourceDeletionPolicy: Delete
+    projId: proj-nahmed-sbox-torg-dev
+  
+  # networks:
+  #   - vpcName: vpc-standalone-nahmed-sbox
+  #     description: VPC for nahmed sbox project
+  #     project: proj-nahmed-sbox
+  #     autoCreateSubnetworks: false
+  #     routingMode: GLOBAL
+  #     labels:
+  #       network-name: vpc-standalone-nahmed-sbox
+
+  # subnets:
+  #   - subnetName: subnet-sbox-priv-useast1-dev-01
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-standalone-nahmed-sbox
+  #     ipCidrRange: 10.198.0.0/24
+  #     description: IP Subnet for nahmed sbox
+  #     project: proj-nahmed-sbox
+  #     privateIpGoogleAccess: true
+  #     logConfig:
+  #     - aggregationInterval: INTERVAL_1_MIN
+  #     region: us-east1
+  #     labels:
+  #       subnet-name: subnet-sbox-priv-useast1-dev-01

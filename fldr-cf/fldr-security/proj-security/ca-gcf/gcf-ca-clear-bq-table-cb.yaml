@@ -1,0 +1,18 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Delete tables
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        bq rm -f -t bqds_ca_sec_us_prd_01.bqtb-ca-sec-policy || true
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Recreate tables
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        bq mk --table --description="Unified Bigquery Table for CA Automation" --schema=trigger_type:STRING,domain:STRING,project_id:STRING,region:STRING,is_active:BOOL,ca_enabled_date:TIMESTAMP,ca_disabled_date:TIMESTAMP,license_status:STRING,quota_status:STRING,policy_id:STRING,creation_time:TIMESTAMP,update_time:TIMESTAMP,latest_execution_status:STRING,failure_reason:STRING,error_timestamp:TIMESTAMP bqds_ca_sec_us_prd_01.bqtb-ca-sec-policy
+options:
+  logging: CLOUD_LOGGING_ONLY 

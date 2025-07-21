@@ -1,0 +1,83 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Clone the cloudops-torg-gcp-argocd repo and/or pull the latest code
+    # dir: '${_SERVICE_FOLDER_NAME}'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- \
+          'mkdir -p $_WORKSPACE || true && cd $_WORKSPACE && \
+            git clone cloudops-torg-gcp-argocd:vonage-atmos/cloudops-torg-gcp-argocd.git || true && cd cloudops-torg-gcp-argocd && git pull'
+      
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Test the helm chart (Dry-run)
+    # dir: '${_SERVICE_FOLDER_NAME}'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if $_DEV_ENV ; then
+          echo "Testing the helm chart for the Dev environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-dev-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=dev --dry-run --debug'
+        fi
+
+        if $_QA_ENV ; then
+          echo "Testing the helm chart for the QA environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-qa-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=qa --dry-run --debug'
+        fi
+
+        if $_PROD_ENV ; then
+          echo "Testing the helm chart for the Prod environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-prd-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=prd --dry-run --debug'
+        fi
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Install/Upgrade the helm chart
+    # dir: '${_SERVICE_FOLDER_NAME}'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if $_DEV_ENV ; then
+          echo "Install/Upgrade the helm chart for the Dev environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-dev-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=dev'
+        fi
+
+        if $_QA_ENV ; then
+          echo "Install/Upgrade the helm chart for the QA environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-qa-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=qa'
+        fi
+
+        if $_PROD_ENV ; then
+          echo "Install/Upgrade the helm chart for the Prod environment ....."  
+          gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- 'cd $_WORKSPACE && \
+            helm upgrade --install ${_FOLDER_NAME}-prd-apps cloudops-torg-gcp-argocd/${_SERVICE_FOLDER_NAME}/root-app --set env=prd'
+        fi
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Cleanup the repository directory
+    # dir: '${_SERVICE_FOLDER_NAME}'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud compute ssh --zone "$_ZONE" "$_JUMP_SERVER" --tunnel-through-iap --quiet  --project $_PROJECT_ID -- \
+          'cd $_WORKSPACE && rm -rf cloudops-torg-gcp-argocd'
+  
+
+timeout: 900s
+logsBucket: "gcs-cblog-qa-01"
+# options:
+#   logging: GCS_ONLY
+substitutions:
+    _JUMP_SERVER: cei-jump-useast4-qa-01
+    _ZONE: us-east4-a
+    _PROJECT_ID: $PROJECT_ID
+    _WORKSPACE: argocd-root-apps-workspace/${_SERVICE_FOLDER_NAME}
+    _SERVICE_FOLDER_NAME: fldr-cf/fldr-${_FOLDER_NAME}

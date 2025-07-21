@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: security-{{ .Values.env }}-apps
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: {{ .Values.appProject }}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+  sources:
+    # Source of app for the proj-security
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-security/proj-security
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+
+# Source of app for the proj-security-prod-aman
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-security-prod-aman
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main

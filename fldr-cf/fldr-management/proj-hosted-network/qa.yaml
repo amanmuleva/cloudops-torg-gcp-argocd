@@ -1,0 +1,111 @@
+env: qa
+configValues: |
+
+  providerConfigName: management-qa-config
+  billingAccountId: 00CD44-0B2D32-2F1E33
+  namespace: management-qa
+  
+  ## To add labels or make changes to the gcp project, edit below
+  project:
+  - name: proj-hosted-network-qa
+    projectId: proj-hosted-network-qa-qaorg
+    autoCreateNetwork: false
+    folderName: fldr-management-qa
+    projectName: proj-hosted-network-qa
+    #enableExternalName: true
+    projectLabels:
+      business_unit: na
+      platform: na
+      service: na
+      application: na
+      environment: na
+      product: na
+      owner_email: cloud-ops-at-vonage-dot-com
+      support_group_email: cloud-ops-at-vonage-dot-com
+      support_group_slack: na
+      opsgenie_contact: na
+      department: na
+      cost_center: na
+      vsa_uspr_classified: na
+      vsa_pe_classified: na
+      vsa_noc_classified: na
+      vsa_dci_classified: na
+      vsa_sc_classified: na
+      compliancy_code: na
+      ipsanction_policy: true
+      ca_scope_1: us-south1
+      ca_scope_2: asia-east2
+      ca_scope: na
+      priority: false
+  
+  ### To enable API Services in the project as required, add to the services list below
+  projectServices:
+  - name: proj-hosted-network-enable-apis
+    disableOnDestroy: false
+    disableDependentServices: false
+    projectName: proj-hosted-network-qa
+    services:
+    - iap.googleapis.com
+    - billingbudgets.googleapis.com
+    - dns.googleapis.com
+    - firewallinsights.googleapis.com
+    - networkmanagement.googleapis.com
+    - logging.googleapis.com
+    - monitoring.googleapis.com
+    - cloudtrace.googleapis.com
+    - recommender.googleapis.com
+    - servicenetworking.googleapis.com
+    - ids.googleapis.com
+    - networksecurity.googleapis.com
+
+  projectIAM:
+  - name: proj-hostednet-qa-roles-guru
+    userEmail: guruprasad.reddy@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "compute-network-admin"
+      role: "roles/compute.networkAdmin"
+    - roleName: "editor"
+      role: "roles/editor"
+      resourceDeletionPolicy: Delete
+    projId: proj-hosted-network-qa-qaorg
+    
+
+  - name: proj-hostednet-qa-roles-aman
+    userEmail: aman.jangid@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "compute-network-admin"
+      role: "roles/compute.networkAdmin"
+    - roleName: "editor"
+      role: "roles/editor"
+      resourceDeletionPolicy: Delete
+    projId: proj-hosted-network-qa-qaorg
+
+  ### To add notification channels, add to the list below
+  notificationChannels:
+  - name: cloudops-team-hosted-qa
+    emailAddress: cloud-ops@vonage.com
+    projectId: proj-hosted-network-qa-qaorg
+
+  # projectIAMCustomRoles:
+  # - roleName: testRole02
+  #   stage: GA
+  #   title: test-role-02
+  #   permissions: ['resourcemanager.projects.getIamPolicy']
+  #   resourceDeletionPolicy: Delete
+  #   project: proj-hosted-network-qa-qaorg
+  # - roleName: vgrgcpdeveloper
+  #   stage: GA
+  #   title: vgrgcpdeveloper
+  #   permissions: ['resourcemanager.projects.getIamPolicy']
+  #   resourceDeletionPolicy: Delete
+  #   project: proj-hosted-network-qa-qaorg
+  # - roleName: vgrgcpdeveloper02
+  #   stage: GA
+  #   title: vgrgcpdeveloper02
+  #   permissions: ['resourcemanager.projects.getIamPolicy']
+  #   resourceDeletionPolicy: Delete
+  #   project: proj-hosted-network-qa-qaorg

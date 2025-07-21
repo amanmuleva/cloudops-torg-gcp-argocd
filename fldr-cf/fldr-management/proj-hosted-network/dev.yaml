@@ -1,0 +1,1151 @@
+env: dev
+configValues: |
+
+  providerConfigName: management-dev-config
+  billingAccountId: 00CD44-0B2D32-2F1E33
+  namespace: management-dev
+  
+  ## To add labels or make changes to the gcp project, edit below
+  project:
+  - name: proj-hosted-network-dev
+    projectId: proj-hosted-network-dev-qaorg
+    autoCreateNetwork: false
+    folderName: fldr-management-dev
+    projectName: proj-hosted-network-dev
+    #enableExternalName: true
+    projectLabels:
+      business_unit: na
+      platform: na
+      service: na
+      application: na
+      environment: na
+      product: na
+      owner_email: cloud-ops-at-vonage-dot-com
+      support_group_email: cloud-ops-at-vonage-dot-com
+      support_group_slack: na
+      opsgenie_contact: na
+      department: na
+      cost_center: na
+      vsa_uspr_classified: na
+      vsa_pe_classified: na
+      vsa_noc_classified: na
+      vsa_dci_classified: na
+      vsa_sc_classified: na
+      compliancy_code: na
+      ipsanction_policy: false
+      ca_scope_1: global
+      ca_scope: na
+      priority: false
+  
+  ### To enable API Services in the project as required, add to the services list below
+  projectServices:
+  - name: proj-hosted-network-enable-apis
+    disableOnDestroy: false
+    disableDependentServices: false
+    projectName: proj-hosted-network-dev
+    services:
+    - iap.googleapis.com
+    - billingbudgets.googleapis.com
+    - dns.googleapis.com
+    - firewallinsights.googleapis.com
+    - networkmanagement.googleapis.com
+    - logging.googleapis.com
+    - monitoring.googleapis.com
+    - cloudtrace.googleapis.com
+    - recommender.googleapis.com
+    - servicenetworking.googleapis.com
+    - ids.googleapis.com
+    - networksecurity.googleapis.com
+
+  ### To add notification channels, add to the list below
+  notificationChannels:
+  - name: cloudops-team-hosted-dev
+    emailAddress: cloud-ops@vonage.com
+    projectId: proj-hosted-network-dev-qaorg
+
+  ### To create vpc network for the project specifically only vpc
+  networks:
+    - vpcName: vpc-sbawane-global-dev-01
+      description: VPC for SBawane sbox
+      project: proj-hosted-network-dev-qaorg
+      autoCreateSubnetworks: false
+      routingMode: GLOBAL
+      labels:
+        network-name: vpc-sbawane-global-dev-01
+    - vpcName: vpc-nahmed-global-dev-01
+      description: VPC for NAhmed Dev projects
+      project: proj-hosted-network-dev-qaorg
+      autoCreateSubnetworks: false
+      routingMode: GLOBAL
+      labels:
+        network-name: vpc-nahmed-global-dev-01
+  #   - vpcName: vpc-cloudvpn-global-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     description: VPC for Dev CloudVPN
+  #     routingMode: GLOBAL
+  #     autoCreateSubnetworks: false
+  #     labels:
+  #       network-name: vpc-cloudvpn-global-dev-01
+
+  projectIAM:
+  - name: proj-hostednet-dev-roles-guru
+    userEmail: guruprasad.reddy@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "compute-network-admin"
+      role: "roles/compute.networkAdmin"
+    - roleName: "editor"
+      role: "roles/editor"
+      resourceDeletionPolicy: Delete
+    projId: proj-hosted-network-dev-qaorg
+
+  ### To create additional subnets for VPC's in the project
+  subnets:
+    - subnetName: subnet-sbawane-priv-useast1-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      ipCidrRange: 10.198.0.0/24
+      description: IP Subnet for sbawane dev
+      project: proj-hosted-network-dev-qaorg
+      privateIpGoogleAccess: true
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      region: us-east1
+      labels:
+        subnet-name: subnet-sbawane-priv-useast1-dev-01
+    - subnetName: subnet-sbawane-priv-uswest1-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      privateIpGoogleAccess: true
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      description: IP Subnet for sbawane dev
+      project: proj-hosted-network-dev-qaorg
+      ipCidrRange: 10.198.2.0/24
+      region: us-west1
+      labels:
+        subnet-name: subnet-sbawane-priv-uswest1-dev-01
+    - subnetName: subnet-sbawane-priv-eucentral2-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      ipCidrRange: 10.198.4.0/24
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      description: IP Subnet for sbawane dev
+      project: proj-hosted-network-dev-qaorg
+      privateIpGoogleAccess: true
+      region: europe-central2
+      labels:
+        subnet-name: subnet-sbawane-priv-eucentral2-dev-01
+    - subnetName: subnet-nahmed-priv-useast1-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      ipCidrRange: 10.198.10.0/24
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      description: IP Subnet for nahmed dev
+      project: proj-hosted-network-dev-qaorg
+      privateIpGoogleAccess: true
+      region: us-east1
+      labels:
+        subnet-name: subnet-nahmed-priv-useast1-dev-01
+    - subnetName: subnet-nahmed-priv-uswest1-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      ipCidrRange: 10.198.12.0/24
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      description: IP Subnet for nahmed dev
+      project: proj-hosted-network-dev-qaorg
+      privateIpGoogleAccess: true
+      region: us-west1
+      labels:
+        subnet-name: subnet-nahmed-priv-uswest1-dev-01
+    - subnetName: subnet-nahmed-priv-eucentral2-dev-01
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      ipCidrRange: 10.198.14.0/24
+      logConfig:
+      - aggregationInterval: INTERVAL_1_MIN
+      description: IP Subnet for nahmed dev
+      project: proj-hosted-network-dev-qaorg
+      privateIpGoogleAccess: true
+      region: europe-central2
+      labels:
+        subnet-name: subnet-nahmed-priv-eucentral2-dev-01
+  #   - subnetName: subnet-cloudvpn-priv-useast1-dev-01
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #     ipCidrRange: 10.198.6.0/24
+  #     logConfig:
+  #     - aggregationInterval: INTERVAL_1_MIN
+  #     privateIpGoogleAccess: true
+  #     description: IP Subnet for Dev CloudVPN
+  #     project: proj-hosted-network-dev-qaorg
+  #     region: us-east1
+  #     labels:
+  #       subnet-name: subnet-cloudvpn-priv-useast1-dev-01
+
+  # ### To create VPC Peering between two VPC's
+  vpc_peerings:
+  - peerName: vpcpeer-sbawane-nahmed-dev
+    exportSubnetRoutesWithPublicIp: false
+    networkSelector:
+      matchLabels:
+        network-name: vpc-sbawane-global-dev-01
+    peerNetworkSelector:
+      matchLabels:
+        network-name: vpc-nahmed-global-dev-01
+    labels:
+      peering-name: vpcpeer-sbawane-nahmed-dev
+  - peerName: vpcpeer-nahmed-sbawane-dev
+    exportSubnetRoutesWithPublicIp: false
+    networkSelector:
+      matchLabels:
+        network-name: vpc-nahmed-global-dev-01
+    peerNetworkSelector:
+      matchLabels:
+        network-name: vpc-sbawane-global-dev-01
+    labels:
+      peering-name: vpcpeer-nahmed-sbawane-dev
+  # - peerName: vpcpeer-sbawane-vpn-dev
+  #   exportSubnetRoutesWithPublicIp: false
+  #   exportCustomRoutes: true
+  #   importCustomRoutes: true
+  #   networkSelector:
+  #     matchLabels:
+  #       network-name: vpc-sbawane-global-dev-01
+  #   peerNetworkSelector:
+  #     matchLabels:
+  #       network-name: vpc-cloudvpn-global-dev-01
+  #   labels:
+  #     peering-name: vpcpeer-sbawane-vpn-dev
+  # - peerName: vpcpeer-vpn-sbawane-dev
+  #   exportSubnetRoutesWithPublicIp: false
+  #   exportCustomRoutes: true
+  #   importCustomRoutes: true
+  #   networkSelector:
+  #     matchLabels:
+  #       network-name: vpc-cloudvpn-global-dev-01
+  #   peerNetworkSelector:
+  #     matchLabels:
+  #       network-name: vpc-sbawane-global-dev-01
+  #   labels:
+  #     peering-name: vpcpeer-vpn-sbawane-dev
+  # - peerName: vpcpeer-nahmed-vpn-dev
+  #   exportSubnetRoutesWithPublicIp: false
+  #   exportCustomRoutes: true
+  #   importCustomRoutes: true
+  #   networkSelector:
+  #     matchLabels:
+  #       network-name: vpc-nahmed-global-dev-01
+  #   peerNetworkSelector:
+  #     matchLabels:
+  #       network-name: vpc-cloudvpn-global-dev-01
+  #   labels:
+  #     peering-name: vpcpeer-nahmed-vpn-dev
+  # - peerName: vpcpeer-vpn-nahmed-dev
+  #   exportSubnetRoutesWithPublicIp: false
+  #   exportCustomRoutes: true
+  #   importCustomRoutes: true
+  #   networkSelector:
+  #     matchLabels:
+  #       network-name: vpc-cloudvpn-global-dev-01
+  #   peerNetworkSelector:
+  #     matchLabels:
+  #       network-name: vpc-nahmed-global-dev-01
+  #   labels:
+  #     peering-name: vpcpeer-vpn-nahmed-dev
+
+  # ### To enable shared vpc host project
+  shared_host_project:
+  - name: shrd-hst-proj-hosted-network-dev
+    projectSelector:
+      matchLabels:
+        project-name: proj-hosted-network-dev
+
+  ### To enable service network project
+  shared_service_project:
+  - name: shrd-svc-proj-sbawane
+    hostProjectSelector:
+      matchLabels:
+        project-name: proj-hosted-network-dev
+    serviceProjectSelector:
+      matchLabels:
+        project-name: proj-sbawane-sbox
+  - name: shrd-svc-proj-nahmed
+    hostProjectSelector:
+      matchLabels:
+        project-name: proj-hosted-network-dev
+    serviceProjectSelector:
+      matchLabels:
+        project-name: proj-nahmed-sbox
+  
+  # - name: shrd-svc-proj-dash
+  #   hostProjectSelector:
+  #     matchLabels:
+  #       project-name: proj-hosted-network-dev
+  #   serviceProjectSelector:
+  #     matchLabels:
+  #       project-name: proj-dash-dev
+
+  ### To add iam members particularly to subnets
+  subnetiammembers:
+
+    - name: useast1-subnet-role-sbawane-shivam
+      member: user:shivam.bawane@vonage.com
+      region: us-east1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-useast1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: uswest1-subnet-role-sbawane-shivam
+      member: user:shivam.bawane@vonage.com
+      region: us-west1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-uswest1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: eucentral2-subnet-role-sbawane-shivam
+      member: user:shivam.bawane@vonage.com
+      region: europe-central2
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-eucentral2-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: useast1-subnet-role-nahmed-shivam
+      member: user:shivam.bawane@vonage.com
+      region: us-east1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-nahmed-priv-useast1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: uswest1-subnet-role-nahmed-shivam
+      member: user:shivam.bawane@vonage.com
+      region: us-west1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-nahmed-priv-uswest1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: useast1-subnet-role-sbawane-rohan
+      member: user:rohan.dwarkha@vonage.com
+      region: us-east1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-useast1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: uswest1-subnet-role-sbawane-rohan
+      member: user:rohan.dwarkha@vonage.com
+      region: us-west1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-uswest1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: eucentral2-subnet-role-sbawane-rohan
+      member: user:rohan.dwarkha@vonage.com
+      region: europe-central2
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-sbawane-priv-eucentral2-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: useast1-subnet-role-nahmed-rohan
+      member: user:rohan.dwarkha@vonage.com
+      region: us-east1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-nahmed-priv-useast1-dev-01
+      project: proj-hosted-network-dev-qaorg
+    - name: uswest1-subnet-role-nahmed-rohan
+      member: user:rohan.dwarkha@vonage.com
+      region: us-west1
+      role: roles/compute.networkUser
+      subnetworkSelector:
+        matchLabels:
+          subnet-name: subnet-nahmed-priv-uswest1-dev-01
+      project: proj-hosted-network-dev-qaorg
+
+  # ### TO Add Additional Firewall Rules Below
+  firewall_rules:
+  # ##### Hosted cloudvpn Firewall rules #####
+  # ### Allow IAP traffic
+  #   - firewallName: fw-hosted-iap-dev-01
+  #     labels:
+  #       firewall-name: fw-hosted-iap-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #     description: "To allow IAP network range for hosted network resources"
+  #     direction: INGRESS
+  #     priority: 1000
+  #     targetTags:
+  #     - iap-allow
+  #     sourceRanges:
+  #     - 35.235.240.0/20
+  #     allow:
+  #     - ports:
+  #       - "22"
+  #       - "3389"
+  #       protocol: tcp
+
+  # ### Allow AWS subnets to communicate 
+  #   - firewallName: fw-hosted-awsvpn-ing-dev-01
+  #     labels:
+  #       firewall-name: fw-hosted-awsvpn-ing-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #     description: "Allow Ingress from AWS VPN subnets"
+  #     direction: INGRESS
+  #     priority: 1000
+  #     targetTags:
+  #     - aws-vpn-subnets
+  #     sourceRanges:
+  #     - 10.0.136.0/23
+  #     - 10.225.212.0/22
+  #     allow:
+  #     - protocol: all
+
+  # ### Allow DNS communication from AWS DNS IPs
+  #   - firewallName: fw-hosted-awsdns-ing-dev-01
+  #     labels:
+  #       firewall-name: fw-hosted-awsdns-ing-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #     description: "Allow Ingress from AWS VPN subnets"
+  #     direction: INGRESS
+  #     priority: 700
+  #     sourceRanges:
+  #     - 10.225.214.114
+  #     - 10.225.214.229
+  #     - 10.225.214.34
+  #     - 10.225.214.195
+  #     allow:
+  #     - ports:
+  #       - "53"
+  #       protocol: tcp
+  #     - ports:
+  #       - "53"
+  #       protocol: udp
+
+
+  ##### nahmed Firewall rules #####
+  ### Allow IAP traffic
+    - firewallName: fw-nahmed-iap-dev-01
+      labels:
+        firewall-name: fw-nahmed-iap-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      description: "To allow IAP network range for nahmed resources"
+      direction: INGRESS
+      priority: 1000
+      targetTags:
+      - iap-allow
+      sourceRanges:
+      - 35.235.240.0/20
+      allow:
+      - ports:
+        - "22"
+        - "3389"
+        protocol: tcp
+
+  ### Allow Internal communication
+    - firewallName: fw-nahmed-internal-ing-dev-01
+      labels:
+        firewall-name: fw-nahmed-internal-ing-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      description: "Allow Ingress from Internal nahmed subnets"
+      direction: INGRESS
+      priority: 800
+      sourceRanges:
+      - 10.198.10.0/24
+      - 10.198.12.0/24
+      - 10.198.14.0/24
+      allow:
+      - protocol: all
+
+  ### Allow communication from peered subnets
+    - firewallName: fw-nahmed-peersub-ing-dev-01
+      labels:
+        firewall-name: fw-nahmed-peersub-ing-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-nahmed-global-dev-01
+      description: "Allow Peered subnets to communicate to nahmed Networks"
+      direction: INGRESS
+      priority: 1000
+      targetTags:
+      - nahmed-peeredsub-dev
+      sourceRanges:
+      - 10.198.0.0/24
+      - 10.198.2.0/24
+      - 10.198.4.0/24
+      allow:
+      - ports:
+        - "22"
+        - "80"
+        - "443"
+        protocol: tcp
+      - protocol: icmp
+
+  # ### Allow AWS subnets to communicate 
+  #   - firewallName: fw-nahmed-awsvpn-ing-dev-01
+  #     labels:
+  #       firewall-name: fw-nahmed-awsvpn-ing-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-nahmed-global-dev-01
+  #     description: "Allow Ingress from AWS VPN subnets"
+  #     direction: INGRESS
+  #     priority: 1000
+  #     targetTags:
+  #     - aws-vpn-subnets
+  #     sourceRanges:
+  #     - 10.0.136.0/23
+  #     - 10.225.212.0/22
+  #     allow:
+  #     - protocol: all
+
+  ##### sbawane Firewall rules #####
+  ### Allow IAP traffic
+    - firewallName: fw-sbawane-iap-dev-01
+      labels:
+        firewall-name: fw-sbawane-iap-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      description: "To allow IAP network range for sbawane resources"
+      direction: INGRESS
+      priority: 1000
+      targetTags:
+      - iap-allow
+      sourceRanges:
+      - 35.235.240.0/20
+      allow:
+      - ports:
+        - "22"
+        - "3389"
+        protocol: tcp
+
+  ### Allow Internal communication
+    - firewallName: fw-sbawane-internal-ing-dev-01
+      labels:
+        firewall-name: fw-sbawane-internal-ing-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      description: "Allow Ingress from Internal sbawane subnets"
+      direction: INGRESS
+      priority: 800
+      sourceRanges:
+      - 10.198.0.0/24
+      - 10.198.2.0/24
+      - 10.198.4.0/24
+      allow:
+      - protocol: all
+
+  ### Allow communication from peered subnets
+    - firewallName: fw-sbawane-peersub-ing-dev-01
+      labels:
+        firewall-name: fw-sbawane-peersub-ing-dev-01
+      project: proj-hosted-network-dev-qaorg
+      networkSelector:
+        matchLabels:
+          network-name: vpc-sbawane-global-dev-01
+      description: "Allow Peered subnets to communicate to sbawane Networks"
+      direction: INGRESS
+      priority: 1000
+      targetTags:
+      - sbawane-peeredsub-dev
+      sourceRanges:
+      - 10.198.10.0/24
+      - 10.198.12.0/24
+      allow:
+      - ports:
+        - "22"
+        - "80"
+        - "443"
+        protocol: tcp
+      - protocol: icmp
+
+  # ### Allow AWS subnets to communicate  
+  #   - firewallName: fw-sbawane-awsvpn-ing-dev-01
+  #     labels:
+  #       firewall-name: fw-sbawane-awsvpn-ing-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-sbawane-global-dev-01
+  #     description: "Allow Ingress from AWS VPN subnets"
+  #     direction: INGRESS
+  #     priority: 1000
+  #     targetTags:
+  #     - aws-vpn-subnets
+  #     sourceRanges:
+  #     - 10.0.136.0/23
+  #     - 10.225.212.0/22
+  #     allow:
+  #     - protocol: all
+
+  #   - firewallName: fw-nahmed-healthcheck-ing-dev-01
+  #     labels:
+  #       firewall-name: fw-nahmed-healthcheck-ing-dev-01
+  #     project: proj-hosted-network-dev-qaorg
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-nahmed-global-dev-01
+  #     description: "Allow traffic from Healthcheck IP ranges"
+  #     direction: INGRESS
+  #     priority: 1000
+  #     sourceRanges:
+  #     - 130.211.0.0/22
+  #     - 35.191.0.0/16
+  #     allow:
+  #     - protocol: all
+
+  # ##### Dash Firewall rules #####
+  # ### Allow IAP traffic
+  #   # - firewallName: fw-dash-iap-dev-01
+  #   #   labels:
+  #   #     firewall-name: fw-dash-iap-dev-01
+  #   #   project: proj-hosted-network-dev-qaorg
+  #   #   network: vpc-dash-global-dev-01
+  #   #   description: "To allow IAP network range for Dash resources"
+  #   #   direction: INGRESS
+  #   #   priority: 1000
+  #   #   targetTags:
+  #   #   - iap-allow
+  #   #   sourceRanges:
+  #   #   - 35.235.240.0/20
+  #   #   allow:
+  #   #   - ports:
+  #   #     - "22"
+  #   #     - "3389"
+  #   #     protocol: tcp
+
+  # ### Allow Internal communication
+  #   # - firewallName: fw-dash-internal-ing-dev-01
+  #   #   labels:
+  #   #     firewall-name: fw-dash-internal-ing-dev-01
+  #   #   project: proj-hosted-network-dev-qaorg
+  #   #   network: vpc-dash-global-dev-01
+  #   #   description: "Allow Ingress from Internal Dash subnets"
+  #   #   direction: INGRESS
+  #   #   priority: 800
+  #   #   sourceRanges:
+  #   #   - 10.198.8.0/24
+  #   #   allow:
+  #   #   - protocol: all
+
+  # ### Firewall Policy Demo
+  #   # - firewallName: fw-nahmed-demo-public-allow
+  #   #   labels:
+  #   #     firewall-name: fw-nahmed-demo-public-allow
+  #   #   project: proj-hosted-network-dev-qaorg
+  #   #   networkSelector:
+  #   #     matchLabels:
+  #   #       network-name: vpc-nahmed-global-dev-01
+  #   #   description: "Firewall Policy Demo"
+  #   #   direction: INGRESS
+  #   #   priority: 700
+  #   #   sourceRanges:
+  #   #   - 223.231.156.138/32
+  #   #   allow:
+  #   #   - ports:
+  #   #     - "22"
+  #   #     protocol: tcp
+  #   #   - protocol: icmp
+
+  # ### To create additional cloud NAT in the VPC network
+  # cloudNAT:
+  # - cloudNatName: cnat-hosted-useast1-dev-01
+  #   labels:
+  #     nat-label: cnat-hosted-useast1-dev-01
+  #   natRegion: us-east1
+  #   routerLabels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES
+  #   natIpAllocateOption: AUTO_ONLY
+
+  # - cloudNatName: cnat-sbawane-useast1-dev-01
+  #   labels:
+  #     nat-label: cnat-sbawane-useast1-dev-01
+  #   natRegion: us-east1
+  #   routerLabels:
+  #     router-label: cr-sbawane-useast1-dev-01
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_IP_RANGES
+  #   natIpAllocateOption: AUTO_ONLY
+
+  # - cloudNatName: cnat-nahmed-useast1-dev-01
+  #   labels:
+  #     nat-label: cnat-nahmed-useast1-dev-01
+  #   natRegion: us-east1
+  #   routerLabels:
+  #     router-label: cr-nahmed-useast1-dev-01
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   sourceSubnetworkIpRangesToNat: ALL_SUBNETWORKS_ALL_IP_RANGES
+  #   natIpAllocateOption: AUTO_ONLY
+
+  # ### To create additional cloud Router in the VPC network
+  # cloudRouter:
+  # - routerName: cr-hosted-useast1-dev-01
+  #   description: Cloud Router for VPN connectivity
+  #   labels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   networkLabels:
+  #     network-name: vpc-cloudvpn-global-dev-01
+  #   routerRegion: us-east1
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   bgp:
+  #   - asn: 65000
+  #     keepaliveInterval: 30
+  #     advertiseMode: CUSTOM
+  #     advertisedIpRanges:
+  #     - 10.198.0.0/24
+  #     - 10.198.2.0/24
+  #     - 10.198.4.0/24
+  #     - 10.198.6.0/24
+  #     - 10.198.10.0/24
+  #     - 10.198.12.0/24
+  #     - 10.198.14.0/24
+  #     - 35.199.192.0/19
+  
+  # - routerName: cr-sbawane-useast1-dev-01
+  #   description: Cloud Router for VPN connectivity
+  #   labels:
+  #     router-label: cr-sbawane-useast1-dev-01
+  #   networkLabels:
+  #     network-name: vpc-sbawane-global-dev-01
+  #   routerRegion: us-east1
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   bgp:
+  #   - asn: 65501
+  #     advertiseMode: CUSTOM
+
+  # - routerName: cr-nahmed-useast1-dev-01
+  #   description: Cloud Router for VPN connectivity
+  #   labels:
+  #     router-label: cr-nahmed-useast1-dev-01
+  #   networkLabels:
+  #     network-name: vpc-nahmed-global-dev-01
+  #   routerRegion: us-east1
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   bgp:
+  #   - asn: 65502
+  #     advertiseMode: CUSTOM
+
+  # ### To create k8 secrets for tunnels to use
+  # tunnelSecrets:
+  # - name: tunnel-0-ikev2-pre-shared-key
+  #   value: b3ZUYkowWnhNS21rY2RuQ1Nhamo1VWpzU2RZWkR2akM=
+  # - name: tunnel-1-ikev2-pre-shared-key
+  #   value: cHpYQWRKUlByMUc3Y3A1ZVA3NE1XWDhXSWtWYUFmVl8=
+  # - name: tunnel-2-ikev2-pre-shared-key
+  #   value: OUJRdlhXbjM4VFBRWExkenZ6T2IxOVBJREd0U1FOWFQ=
+  # - name: tunnel-3-ikev2-pre-shared-key
+  #   value: aHBXMWNqTU5uem5IdEdEeVZRQUNrbGN2ck5QOUdxbnM=
+
+  # ### To create HAVPN Gateway for the project
+  # haVpnGateway:
+  # - haVpnGatewayName: vpngw-hosted-useast1-dev-01
+  #   region: us-east1
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   labels:
+  #     havpngw-label: vpngw-hosted-useast1-dev-01
+  #   networkLabels:
+  #     network-name: vpc-cloudvpn-global-dev-01
+
+  # ### To create PeerVPN Gateway in the project
+  # peerVpnGateway:
+  # - peerVpnGatewayName: peervpngw-hosted-useast1-dev-01
+  #   labels:
+  #     peergw-name: peervpngw-hosted-useast1-dev-01
+  #   redundancyType: FOUR_IPS_REDUNDANCY
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   interfaces:
+  #   - id: 0
+  #     ipAddress: 52.7.100.95
+  #   - id: 1
+  #     ipAddress: 54.234.212.230
+  #   - id: 2
+  #     ipAddress: 35.168.173.193
+  #   - id: 3
+  #     ipAddress: 52.2.71.158
+
+  # ### To create VPN Tunnels in the project
+  # vpnTunnels:
+  # - vpnTunnelName: hosted-vpntunnel-dev-0-0
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   routerLabels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   region: us-east1
+  #   sharedSecretRefKey: key
+  #   sharedSecretRefName: tunnel-0-ikev2-pre-shared-key
+  #   sharedSecretRefNamespace: management-dev
+  #   peerVpnGatewayInterface: 0
+  #   peerVpnGatewaySelector:
+  #     peergw-name: peervpngw-hosted-useast1-dev-01
+  #   vpnGatewayInterface: 0
+  #   vpnGatewaySelector:
+  #     havpngw-label: vpngw-hosted-useast1-dev-01
+  #   routerPeerName: bgp-hosted-tunnel-00
+  #   routerpeerAsn: 4202000000
+  #   routerPeerIpAddress: 169.254.115.93
+  #   advertisedRoutePriority: 100
+  #   routerInterfaceName: bgp-hosted-tunnel-interface-00
+  #   routerInterfaceIpRange: 169.254.115.94
+  #   externalName: cr-hosted-useast1-dev-01/bgp-hosted-tunnel-interface-00
+
+  # - vpnTunnelName: hosted-vpntunnel-dev-0-1
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   routerLabels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   region: us-east1
+  #   sharedSecretRefKey: key
+  #   sharedSecretRefName: tunnel-1-ikev2-pre-shared-key
+  #   sharedSecretRefNamespace: management-dev
+  #   peerVpnGatewayInterface: 1
+  #   peerVpnGatewaySelector:
+  #     peergw-name: peervpngw-hosted-useast1-dev-01
+  #   vpnGatewayInterface: 0
+  #   vpnGatewaySelector:
+  #     havpngw-label: vpngw-hosted-useast1-dev-01
+  #   routerPeerName: bgp-hosted-tunnel-01
+  #   routerpeerAsn: 4202000000
+  #   routerPeerIpAddress: 169.254.112.245
+  #   advertisedRoutePriority: 100
+  #   routerInterfaceName: bgp-hosted-tunnel-interface-01
+  #   routerInterfaceIpRange: 169.254.112.246
+  #   externalName: cr-hosted-useast1-dev-01/bgp-hosted-tunnel-interface-01
+
+  # - vpnTunnelName: hosted-vpntunnel-dev-1-2
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   routerLabels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   region: us-east1
+  #   sharedSecretRefKey: key
+  #   sharedSecretRefName: tunnel-2-ikev2-pre-shared-key
+  #   sharedSecretRefNamespace: management-dev
+  #   peerVpnGatewayInterface: 2
+  #   peerVpnGatewaySelector:
+  #     peergw-name: peervpngw-hosted-useast1-dev-01
+  #   vpnGatewayInterface: 1
+  #   vpnGatewaySelector:
+  #     havpngw-label: vpngw-hosted-useast1-dev-01
+  #   routerPeerName: bgp-hosted-tunnel-12
+  #   routerpeerAsn: 4202000000
+  #   routerPeerIpAddress: 169.254.75.189
+  #   advertisedRoutePriority: 100
+  #   routerInterfaceName: bgp-hosted-tunnel-interface-12
+  #   routerInterfaceIpRange: 169.254.75.190
+  #   externalName: cr-hosted-useast1-dev-01/bgp-hosted-tunnel-interface-12
+
+  # - vpnTunnelName: hosted-vpntunnel-dev-1-3
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   routerLabels:
+  #     router-label: cr-hosted-useast1-dev-01
+  #   region: us-east1
+  #   sharedSecretRefKey: key
+  #   sharedSecretRefName: tunnel-3-ikev2-pre-shared-key
+  #   sharedSecretRefNamespace: management-dev
+  #   peerVpnGatewayInterface: 3
+  #   peerVpnGatewaySelector:
+  #     peergw-name: peervpngw-hosted-useast1-dev-01
+  #   vpnGatewayInterface: 1
+  #   vpnGatewaySelector:
+  #     havpngw-label: vpngw-hosted-useast1-dev-01
+  #   routerPeerName: bgp-hosted-tunnel-13
+  #   routerpeerAsn: 4202000000
+  #   routerPeerIpAddress: 169.254.218.53
+  #   advertisedRoutePriority: 100
+  #   routerInterfaceName: bgp-hosted-tunnel-interface-13
+  #   routerInterfaceIpRange: 169.254.218.54
+  #   externalName: cr-hosted-useast1-dev-01/bgp-hosted-tunnel-interface-13
+
+  # ### To add IAM Roles in the project to certain users or SA's
+  # projectIAM:
+  # - name: proj-hosted-roles-rohan
+  #   userEmail: rohan.dwarkha@vonage.com
+  #   roles:
+  #   - roleName: "compute-instance-admin-v1"
+  #     role: roles/compute.instanceAdmin.v1
+  #   - roleName: "service-account-admin"
+  #     role: roles/iam.serviceAccountUser
+  #   projRef:
+  #     name: proj-hosted-network-dev
+
+  # - name: proj-hosted-roles-shivam
+  #   userEmail: shivam.bawane@vonage.com
+  #   roles:
+  #   - roleName: "compute-instance-admin-v1"
+  #     role: roles/compute.instanceAdmin.v1
+  #   - roleName: "service-account-admin"
+  #     role: roles/iam.serviceAccountUser
+  #   projRef:
+  #     name: proj-hosted-network-dev
+
+  # ### To add DNS Private Zones and DNS Peers
+  # dnsZones:
+  # ### AWS Forwarding Config
+  # - managedZoneName: torg-aws-priv
+  #   dnsName: torg.aws.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   forwardingConfig:
+  #   - ipv4Address: "10.225.214.114"
+  #     forwardingPath: private
+  #   - ipv4Address: "10.225.214.229"
+  #     forwardingPath: private
+  #   labels:
+  #     zone-name: torg-aws-priv
+
+  # ### Private Zone for Hub
+  # - managedZoneName: dnszone-cloudvpn-global-dev
+  #   dnsName: vpc-cloudvpn-global-dev-01.proj-hosted-network-dev.dev.von.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   labels:
+  #     zone-name: dnszone-cloudvpn-global-dev
+
+  # ###################
+  # ### Private Zone for sbawane
+  # - managedZoneName: dnszone-sbawane-global-dev
+  #   dnsName: vpc-sbawane-global-dev-01.proj-sbawane.uc.dev.von.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-sbawane-global-dev-01
+  #   labels:
+  #     zone-name: dnszone-sbawane-global-dev       
+
+  # ### Peering from spoke(sbawane) to hub for DNS '.'   
+  # - managedZoneName: dnspeer-sbawane-hub
+  #   dnsName: ""
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   peeringConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-sbawane-global-dev-01
+  #   labels:
+  #     zone-name: dnspeer-sbawane-hub
+
+  # ### Peering from Hub to spoke(sbawane)
+  # - managedZoneName: dnspeer-hub-sbawane
+  #   dnsName: vpc-sbawane-global-dev-01.proj-sbawane.uc.dev.von.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   peeringConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-sbawane-global-dev-01
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   labels:
+  #     zone-name: dnspeer-hub-sbawane
+
+  # ###################
+  # ### Private Zone for nahmed
+  # - managedZoneName: dnszone-nahmed-global-dev
+  #   dnsName: vpc-nahmed-global-dev-01.proj-nahmed-shared-prd.shared.dev.von.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-nahmed-global-dev-01
+  #   labels:
+  #     zone-name: dnszone-nahmed-global-dev
+
+  # ### Peering from spoke(nahmed) to hub for DNS '.'
+  # - managedZoneName: dnspeer-nahmed-hub
+  #   dnsName: ""
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   peeringConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-nahmed-global-dev-01
+  #   labels:
+  #     zone-name: dnspeer-nahmed-hub
+
+  # ### Peering from Hub to spoke(nahmed)
+  # - managedZoneName: dnspeer-hub-nahmed
+  #   dnsName: vpc-nahmed-global-dev-01.proj-nahmed-shared-prd.shared.dev.von.priv
+  #   visibility: private
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   peeringConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-nahmed-global-dev-01
+  #   privateVisibilityConfig:
+  #   - networkUrlSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+  #   labels:
+  #     zone-name: dnspeer-hub-nahmed
+
+  # ####################
+  # #### Private Zone for Dash
+  # # - managedZoneName: dnszone-dash-global-dev
+  # #   dnsName: vpc-dash-global-dev-01.proj-dash.uc.dev.von.priv
+  # #   visibility: private
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   privateVisibilityConfig:
+  # #   - networkUrl: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-dash-global-dev-01
+  # #   labels:
+  # #     zone-name: dnszone-dash-global-dev
+  
+  # #### Peering from spoke(Dash) to hub for DNS '.'
+  # # - managedZoneName: dnspeer-dash-hub
+  # #   dnsName: ""
+  # #   visibility: private
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   peeringConfig:
+  # #   - networkUrlSelector:
+  # #       matchLabels:
+  # #         network-name: vpc-cloudvpn-global-dev-01
+  # #   privateVisibilityConfig:
+  # #   - networkUrl: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-dash-global-dev-01
+  # #   labels:
+  # #     zone-name: dnspeer-dash-hub
+  
+  # #### Peering from Hub to spoke(Dash)
+  # # - managedZoneName: dnspeer-hub-dash
+  # #   dnsName: vpc-dash-global-dev-01.proj-dash.uc.dev.von.priv
+  # #   visibility: private
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   peeringConfig:
+  # #   - networkUrl: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-dash-global-dev-01
+  # #   privateVisibilityConfig:
+  # #   - networkUrlSelector:
+  # #       matchLabels:
+  # #         network-name: vpc-cloudvpn-global-dev-01
+  # #   labels:
+  # #     zone-name: dnspeer-hub-dash
+  
+
+  # ### GCP Inbound DNS policy config
+  # dnsPolicies:
+  # - policyName: dns-inbound-cloudvpn-dev
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   enableInboundForwarding: true
+  #   networks:
+  #   - networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-cloudvpn-global-dev-01
+
+  # # dnsRecords:
+  # # - name: nahmedvm-test
+  # #   gcpRecordName: nahmedvm.vpc-nahmed-global-dev-01.proj-nahmed-shared-prd.shared.dev.von.priv
+  # #   zoneLabels:
+  # #     zone-name: dnszone-nahmed-global-dev
+  # #   recordType: A
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   rrdatas:
+  # #   - "10.198.10.2"
+  # #   ttl: 60
+
+  # ## Network Dev Resource block. Each entry creates a VPC, Subnet, Firewall Rules, Cloud Router and Cloud NAT
+  # # networkDevResources:
+  # # - name: composite-network-dash-dev
+  # #   project: proj-hosted-network-dev-qaorg
+  # #   region: us-east1
+  # #   vpcName: vpc-dash-global-dev-01
+  # #   subnetName: subnet-dash-priv-useast1-dev-01
+  # #   privateIpGoogleAccess: true
+  # #   ipCidrRange: 10.198.8.0/24
+  # #   routerName: cr-dash-useast1-dev-01
+  # #   bgp:
+  # #   - asn: 65503
+  # #     advertiseMode: CUSTOM
+  # #   natGatewayName: cnat-dash-useast1-dev-01
+  # #   firewallName: fw-dash-awsvpn-ing-dev-01
+  # #   priority: 1000
+  # #   targetTags:
+  # #   - aws-vpn-subnets
+  # #   allow:
+  # #     - protocol: all
+  # #   direction: INGRESS
+  # #   sourceRanges:
+  # #     - 10.0.136.0/23
+  # #     - 10.225.212.0/22
+
+  # psa:
+  # - name: psa-nahmed-dev-01
+  #   service: servicenetworking.googleapis.com
+  #   network: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-nahmed-global-dev-01
+  #   globalAddressName: iprange-psa-nahmed-dev-01
+  #   projectId: proj-hosted-network-dev-qaorg
+  #   addressType: INTERNAL
+  #   purpose: VPC_PEERING
+  #   address: "10.198.11.0"
+  #   prefixLength: 24
+
+  # # idsendpoints:
+  # # - name: ids-nahmed-global-dev-01
+  # #   severity: INFORMATIONAL
+  # #   network: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-nahmed-global-dev-01
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   location: us-east1-b
+
+  # # packetmirroringpolicies:
+  # # - packetMirroringPolicyName: pktmirror-ids-nahmed-useast1
+  # #   projectId: proj-hosted-network-dev-qaorg
+  # #   network: projects/proj-hosted-network-dev-qaorg/global/networks/vpc-nahmed-global-dev-01
+  # #   subnetworks:
+  # #     - url: projects/proj-hosted-network-dev-qaorg/regions/us-east1/subnetworks/subnet-nahmed-priv-useast1-dev-01
+  # #   collectorIlb: https://www.googleapis.com/compute/v1/projects/w427fb549bbf3d615-tp/regions/us-east1/forwardingRules/ids-fr-ids-ce-ajzp9yciyoxz9ltb
+  # #   region: us-east1
+  # #   priority: 1000

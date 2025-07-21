@@ -1,0 +1,47 @@
+steps:
+  # zip the source code directory
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   # dir: $_SERVICE_FOLDER_NAME
+#   args: ["-c", "tar -czvf ${_TAR_FILE_NAME}.tar.gz $_SOURCE && ls -al"]
+
+#   # upload the zip file to gcs bucket (artifact)
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   # dir: $_SERVICE_FOLDER_NAME
+#   args: ["gsutil", "cp", "${_TAR_FILE_NAME}.tar.gz", "gs://${_GCS_BUCKET}"]
+
+  # Deploy the Cloud Function
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy to GCF
+  # dir: $_SERVICE_FOLDER_NAME
+  args:
+  - functions
+  - deploy
+  - $_FUNCTION_NAME
+  - --gen2
+  - --serve-all-traffic-latest-revision
+  - --region=$_LOCATION
+  - --trigger-location=$_LOCATION
+  - --source=$_SOURCE
+  - --runtime=$_RUNTIME
+  - --entry-point=$_ENTRY_POINT
+  # - --trigger-topic=$_TRIGGER_TOPIC
+  - --service-account=${_GCF_SA}
+  # - --trigger-service-account=${_GCF_SA}
+  - --build-service-account=projects/${PROJECT_ID}/serviceAccounts/${_GCF_SA}
+  - --run-service-account=${_GCR_SA}
+  - --cpu=$_CPU
+  - --memory=$_MEMORY
+  - --max-instances=$_MAX_INSTANCES
+  - --timeout=$_TIMEOUT_SECONDS
+  - --allow-unauthenticated
+  - --ingress-settings=internal-and-gclb
+  - --env-vars-file=$_ENV_VARS_FILE
+  # - --retry
+  # - --set-env-vars=$_ENV_VARS
+  - --trigger-http
+
+
+timeout: 900s
+options:
+  logging: CLOUD_LOGGING_ONLY 

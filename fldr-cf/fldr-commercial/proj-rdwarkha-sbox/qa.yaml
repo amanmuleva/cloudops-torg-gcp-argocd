@@ -1,0 +1,73 @@
+env: qa
+configValues: |
+
+  providerConfigName: commercial-qa-config
+  billingAccountId: 00CD44-0B2D32-2F1E33
+  namespace: commercial-qa
+
+  project:
+  - name: proj-rdwarkha-sbox
+    projectId: proj-rdwarkha-sbox-torg-qa
+    autoCreateNetwork: false
+    folderName: fldr-commercial-qa
+    projectName: proj-rdwarkha-sbox
+    #enableExternalName: true
+    projectLabels:
+      business_unit: sbox
+      platform: na
+      service: sbox
+      application: sbox
+      environment: qa
+      product: sbox
+      owner_email: rohan-dot-dwarkha-at-vonage-dot-com
+      support_group_email: cloud-ops-at-vonage-dot-com
+      support_group_slack: cloudops
+      opsgenie_contact: cloudops
+      department: cloudops
+      cost_center: 765
+      vsa_uspr_classified: yes
+      vsa_pe_classified: yes
+      vsa_noc_classified: yes
+      vsa_dci_classified: yes
+      vsa_sc_classified: yes
+      compliancy_code: unknown
+
+  projectServices:
+  - name: proj-rdwarkha-sbox-enable-apis
+    disableOnDestroy: false
+    disableDependentServices: false
+    projectName: proj-rdwarkha-sbox
+    services:
+    - billingbudgets.googleapis.com
+    - firewallinsights.googleapis.com
+    - networkmanagement.googleapis.com
+
+  notificationChannels:
+  - name: cloudops-team-rdwarkha-torg-qa
+    emailAddress: rohan.dwarkha@vonage.com
+    projectId: proj-rdwarkha-sbox-torg-qa
+  
+  
+  # networks:
+  #   - vpcName: vpc-standalone-rdwarkha-sbox
+  #     description: VPC for rdwarkha sbox project
+  #     project: proj-rdwarkha-sbox
+  #     autoCreateSubnetworks: false
+  #     routingMode: GLOBAL
+  #     labels:
+  #       network-name: vpc-standalone-rdwarkha-sbox
+
+  # subnets:
+  #   - subnetName: subnet-sbox-priv-useast1-qa-01
+  #     networkSelector:
+  #       matchLabels:
+  #         network-name: vpc-standalone-rdwarkha-sbox
+  #     ipCidrRange: 10.198.0.0/24
+  #     description: IP Subnet for rdwarkha sbox
+  #     project: proj-rdwarkha-sbox
+  #     privateIpGoogleAccess: true
+  #     logConfig:
+  #     - aggregationInterval: INTERVAL_1_MIN
+  #     region: us-east1
+  #     labels:
+  #       subnet-name: subnet-sbox-priv-useast1-qa-01

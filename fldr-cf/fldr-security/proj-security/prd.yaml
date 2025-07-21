@@ -1,0 +1,514 @@
+env: prd
+configValues: |
+
+  providerConfigName: security-prd-config
+  billingAccountId: 00CD44-0B2D32-2F1E33
+  namespace: security-prd
+
+  project:
+  - name: proj-security-prd
+    projectId: proj-torg-security-prd-ypth
+    autoCreateNetwork: false
+    folderName: fldr-security-prd
+    projectName: proj-security-prd
+    projectLabels:
+      business_unit: sbox
+      platform: na
+      service: sbox
+      application: sbox
+      environment: dev
+      product: sbox
+      owner_email: shivam-dot-bawane-at-vonage-dot-com
+      support_group_email: cloud-ops-at-vonage-dot-com
+      support_group_slack: cloudops
+      opsgenie_contact: cloudops
+      department: cloudops
+      cost_center: 765
+      vsa_uspr_classified: yes
+      vsa_pe_classified: yes
+      vsa_noc_classified: yes
+      vsa_dci_classified: yes
+      vsa_sc_classified: yes
+      compliancy_code: unknown
+
+  projectServices:
+  - name: proj-security-enable-apis
+    disableOnDestroy: false
+    disableDependentServices: false
+    projectName: proj-security-prd
+    services:
+    - billingbudgets.googleapis.com
+    - bigquery.googleapis.com
+    - pubsub.googleapis.com
+    - compute.googleapis.com
+    - cloudbuild.googleapis.com
+    - cloudfunctions.googleapis.com
+    - run.googleapis.com
+    - eventarc.googleapis.com
+    - securitycentermanagement.googleapis.com
+    - securitycenter.googleapis.com
+    - websecurityscanner.googleapis.com
+    - gmail.googleapis.com
+    - cloudresourcemanager.googleapis.com
+    - monitoring.googleapis.com
+    - secretmanager.googleapis.com
+    - networksecurity.googleapis.com
+    - cloudscheduler.googleapis.com
+    - certificatemanager.googleapis.com
+    - cloudquotas.googleapis.com
+    - cloudasset.googleapis.com
+    - bigtable.googleapis.com
+
+  notificationChannels:
+  - name: cldops-torg-sec-prd
+    emailAddress: cloud-ops@vonage.com
+    projectId: proj-torg-security-prd-ypth
+  - name: guru-torg-sec-prd
+    emailAddress: guruprasad.reddy@vonage.com
+    projectId: proj-torg-security-prd-ypth
+  - name: shivam-torg-sec-prd
+    emailAddress: shivam.bawane@vonage.com
+    projectId: proj-torg-security-prd-ypth
+  - name: nasir-torg-sec-prd
+    emailAddress: nasir.ahmed@vonage.com
+    projectId: proj-torg-security-prd-ypth
+
+  serviceAccount:
+  - name: gcf-ca-sa
+    displayName: "Service account for cloud armor provisioning via GCF"
+    labels:
+      tag: ca-sa
+      sa-name: gcf-ca-sa
+    description: "Service account for cloud armor provisioning via GCF"
+    projectId: proj-torg-security-prd-ypth
+
+  projectIAM:
+  - name: proj-security-prd-roles-gcfsa
+    serviceAccountEmail: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+    roles:
+    - roleName: "logs-writer"
+      role: "roles/logging.logWriter"
+    - roleName: "monitoring-metrics-writer"
+      role: "roles/monitoring.metricWriter"
+    - roleName: "bq-data-editor"
+      role: "roles/bigquery.dataEditor"
+    - roleName: "cloudfunctions-admin"
+      role: "roles/cloudfunctions.admin"
+    - roleName: "service-account-user"
+      role: "roles/iam.serviceAccountUser"
+    - roleName: "secret-accessor"
+      role: "roles/secretmanager.secretAccessor"
+    - roleName: "storage-object-viewer"
+      role: "roles/storage.objectViewer"
+    - roleName: "artifactregistry-writer"
+      role: "roles/artifactregistry.writer"
+    - roleName: "bq-job-user"
+      role: "roles/bigquery.jobUser"
+      resourceDeletionPolicy: Delete
+    - roleName: "bigtable-user"
+      role: "roles/bigtable.user"
+    projId: proj-torg-security-prd-ypth
+
+  - name: proj-security-prd-roles-guru
+    userEmail: guruprasad.reddy@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "cloudbuild-editor"
+      role: "roles/cloudbuild.builds.editor"
+    - roleName: "secret-manager-admin"
+      role: "roles/secretmanager.admin"
+    - roleName: "scheduler-admin"
+      role: "roles/cloudscheduler.admin"
+    - roleName: "bq-data-editor"
+      role: "roles/bigquery.dataEditor"
+    - roleName: "bigtable-admin"
+      role: "roles/bigtable.admin"
+    - roleName: "editor"
+      role: "roles/editor"
+      resourceDeletionPolicy: Delete
+    projId: proj-torg-security-prd-ypth
+
+  # - name: proj-security-prd-roles-anoop
+  #   userEmail: anoop.doddamane2@vonage.com
+  #   roles:
+  #   - roleName: "service-account-admin"
+  #     role: "roles/iam.serviceAccountAdmin"
+  #     resourceDeletionPolicy: Delete
+  #   projId: proj-torg-security-prd-ypth
+
+  - name: proj-security-prd-roles-aman
+    userEmail: aman.jangid@vonage.com
+    roles:
+    - roleName: "compute-security-admin"
+      role: "roles/compute.securityAdmin"
+    - roleName: "cloudbuild-editor"
+      role: "roles/cloudbuild.builds.editor"
+    - roleName: "secret-manager-admin"
+      role: "roles/secretmanager.admin"
+    - roleName: "scheduler-admin"
+      role: "roles/cloudscheduler.admin"
+    - roleName: "bq-data-editor"
+      role: "roles/bigquery.dataEditor"
+    projId: proj-torg-security-prd-ypth
+
+  globalAddresses:
+  - globalAddressName: global-address-security-prd-01
+    projectId: proj-torg-security-prd-ypth
+    addressType: EXTERNAL
+    labels:
+      static-ip: global-address-security-prd-01
+
+  cloudscheduler:
+  - name: job-ca-security-prd-01
+    description: "Trigger GCF via the HTTP endpoint of the LB attached to it"
+    httpTarget:
+    - body: 
+        {
+          "source": "scheduler"
+        }
+      headers:
+        Content-Type: application/json
+        Sec-Header: 6Adbjk87
+      httpMethod: POST
+      uri: https://cloudarmor-automation.atmos.vonagenetworks.net/
+    projectId: proj-torg-security-prd-ypth
+    region: us-east4
+    schedule: 0 0 1 1 *
+    timeZone: America/New_York
+
+  cbTrigger:
+  - name: cb-gcf-ca-request-handler
+    approvalRequired: false
+    description: CB Trigger to deploy the GCF for handling cloud armor requests.
+    disabled: false
+    filename: fldr-cf/fldr-security/proj-security/ca-gcf/gcf-ca-request-handler-cb.yaml
+    github:
+    - repoName: cloudops-torg-gcp-argocd
+      repoOwner: vonage-atmos
+      push:
+      - branchName: main
+    includedFiles:
+    - fldr-cf/fldr-security/proj-security/ca-gcf/request-handler/**
+    location: global
+    projectId: proj-torg-security-prd-ypth
+    serviceAccount: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+    substitutions:
+      _FUNCTION_NAME: gcf-ca-request-handler
+      _LOCATION: us-east4
+      _SOURCE: fldr-cf/fldr-security/proj-security/ca-gcf/request-handler
+      _RUNTIME: python39
+      _ENTRY_POINT: auto_manage_cloud_armor_policies
+      _GCF_SA: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+      _GCR_SA: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+      _CPU: 1
+      _MEMORY: 1Gi
+      _MAX_INSTANCES: 3
+      _TIMEOUT_SECONDS: 3600s
+      _ENV_VARS_FILE: fldr-cf/fldr-security/proj-security/ca-gcf/.env.yaml
+
+  - name: cb-gcf-ca-provision
+    approvalRequired: false
+    description: CB Trigger to deploy the GCF for provision cloud armor policies and rules.
+    disabled: false
+    filename: fldr-cf/fldr-security/proj-security/ca-gcf/gcf-ca-provision-cb.yaml
+    github:
+    - repoName: cloudops-torg-gcp-argocd
+      repoOwner: vonage-atmos
+      push:
+      - branchName: main
+    includedFiles:
+    - fldr-cf/fldr-security/proj-security/ca-gcf/provision/**
+    location: global
+    projectId: proj-torg-security-prd-ypth
+    serviceAccount: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+    substitutions:
+      _FUNCTION_NAME: gcf-ca-provision
+      _LOCATION: us-east4
+      _SOURCE: fldr-cf/fldr-security/proj-security/ca-gcf/provision
+      _RUNTIME: python39
+      _ENTRY_POINT: create_cloud_armor_security_policies
+      _GCF_SA: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+      _GCR_SA: gcf-ca-sa@proj-torg-security-prd-ypth.iam.gserviceaccount.com
+      _CPU: 1
+      _MEMORY: 1Gi
+      _CONCURRENCY: 1
+      _MAX_INSTANCES: 10
+      _TIMEOUT_SECONDS: 3600s
+      _ENV_VARS_FILE: fldr-cf/fldr-security/proj-security/ca-gcf/.env.yaml
+
+  regionalneg:
+  - regionNetworkEndpointGroupName: neg-useast4-security-prd-01
+    region: us-east4
+    projectId: proj-torg-security-prd-ypth
+    resourceDeletionPolicy: Orphan
+    cloudFunction:
+      function: gcf-ca-request-handler
+  - regionNetworkEndpointGroupName: neg-useast4-security-prd-02
+    region: us-east4
+    projectId: proj-torg-security-prd-ypth
+    resourceDeletionPolicy: Orphan
+    cloudFunction:
+      function: gcf-ca-provision
+
+  backendservices:
+  - backendServiceName: backend-useast4-security-prd-02
+    backendProtocol: HTTPS
+    resourceDeletionPolicy: Orphan
+    securityPolicy: armor-global-security-prd-01
+    projectId: proj-torg-security-prd-ypth
+    loadBalancingScheme: EXTERNAL_MANAGED
+    groupUrl: projects/proj-torg-security-prd-ypth/regions/us-east4/networkEndpointGroups/neg-useast4-security-prd-02
+
+  globalhttpsalb:
+  - loadBalancerName: alb-global-security-prd-01
+    globalForwardingRuleName: fw-global-security-prd-01
+    targetHTTPSProxyName: proxy-global-security-prd-01
+    portRange: "443"
+    resourceDeletionPolicy: Orphan
+    sslCertificates:
+      - projects/proj-torg-security-prd-ypth/global/sslCertificates/ca-gcp-automation
+    projectId: proj-torg-security-prd-ypth
+    backendServiceName: backend-useast4-security-prd-01
+    ipAddressSelector:
+      static-ip: global-address-security-prd-01
+    backendProtocol: HTTPS
+    hostRule:
+      - hosts:
+          - cloudarmor-automation.atmos.vonagenetworks.net
+        pathMatcher: path-matcher-01
+    pathMatcher:
+      - name: path-matcher-01
+        pathRule:
+          - service: backend-useast4-security-prd-02
+            paths:
+              - /gcf-ca-provision
+    securityPolicy: armor-global-security-prd-01
+    groupUrl: projects/proj-torg-security-prd-ypth/regions/us-east4/networkEndpointGroups/neg-useast4-security-prd-01
+    sslPolicyName: global-sslpolicy-security-prd-01
+    minTlsVersion: TLS_1_2
+    profile: COMPATIBLE
+
+  armor_policies:
+  - securityPolicyName: armor-global-security-prd-01
+    projectId: proj-torg-security-prd-ypth
+    type: CLOUD_ARMOR
+    resourceDeletionPolicy: Orphan
+    rule:
+    - action : deny(403)
+      description: Default Rule
+      match:
+        - config:
+            - srcIpRanges:
+                - "*"
+      priority: 2147483647
+    - action: deny(403)
+      description: SQL injection
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredWaf('sqli-v33-stable', { 'sensitivity': 3, 'opt_out_rule_ids':['owasp-crs-v030301-id942431-sqli', 'owasp-crs-v030301-id942260-sqli', 'owasp-crs-v030301-id942340-sqli', 'owasp-crs-v030301-id942200-sqli', 'owasp-crs-v030301-id942370-sqli', 'owasp-crs-v030301-id942300-sqli', 'owasp-crs-v030301-id942430-sqli', 'owasp-crs-v030301-id942330-sqli', 'owasp-crs-v030301-id942490-sqli']})"
+      priority: 1000
+    - action: deny(403)
+      description: Cross-site scripting
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('xss-v33-stable')"
+      priority: 1001
+    - action: deny(403)
+      description: Local file inclusion
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('lfi-v33-stable')"
+      priority: 1002
+    - action: deny(403)
+      description: Remote file inclusion
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('rfi-v33-stable')"
+      priority: 1003
+    - action: deny(403)
+      description: Method enforcement
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('methodenforcement-v33-stable')"
+      priority: 1004
+    - action: deny(403)
+      description: Scanner detection
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredWaf('scannerdetection-v33-stable', { 'sensitivity': 3, 'opt_out_rule_ids':['owasp-crs-v030301-id913101-scannerdetection']})"
+      priority: 1005
+    - action: deny(403)
+      description: Protocol attack
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('protocolattack-v33-stable')"
+      priority: 1006
+    - action: deny(403)
+      description: PHP injection attack
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('php-v33-stable')"
+      priority: 1007
+    - action: deny(403)
+      description: Session fixation attack
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('sessionfixation-v33-stable')"
+      priority: 1008
+    - action: deny(403)
+      description: Java attack
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('java-v33-stable')"
+      priority: 1009
+    - action: deny(403)
+      description: NodeJS attack
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('nodejs-v33-stable')"
+      priority: 1010
+    - action: deny(403)
+      description: Remote code execution
+      preview: true
+      match:
+        - expr:
+            - expression: "evaluatePreconfiguredExpr('rce-v33-stable')"
+      priority: 1011
+    - action: allow
+      description: Custom rule
+      match:
+        - expr:
+            - expression: request.method == 'POST' && request.headers['Sec-Header'] == '6Adbjk87'
+      priority: 1012
+
+  - securityPolicyName: armor-global-security-prd-02
+    projectId: proj-torg-security-prd-ypth
+    type: CLOUD_ARMOR
+    resourceDeletionPolicy: Delete
+    rule:
+    - action : deny(403)
+      description: Default Rule
+      match:
+        - config:
+            - srcIpRanges:
+                - "*"
+      priority: 2147483647
+
+  log_metrics:
+  - metricName: lm-gcf-ca-error-count-01
+    resourceDeletionPolicy: Delete
+    filter: 'resource.type="cloud_run_revision" AND textPayload:"[CF1-ERROR]"'
+    description: "Log based metric to track ca-automation error count"
+    projectId: proj-torg-security-prd-ypth
+  - metricName: lm-gcf-ca-error-count-02
+    resourceDeletionPolicy: Delete
+    filter: 'resource.type="cloud_run_revision" AND textPayload:"[CF2-ERROR]"'
+    description: "Log based metric to track ca-automation error count"
+    projectId: proj-torg-security-prd-ypth
+
+  alertPolicies:
+  - alertPolicyName: ap-gcf-ca-log-event-01
+    resourceDeletionPolicy: Delete
+    alertStrategy:
+    - autoClose: 1800s
+      notificationRateLimit:
+      - period: 300s
+    combiner: OR
+    conditions:
+    - conditionMatchedLog:
+      - filter: 'resource.type="cloud_run_revision" AND textPayload:"[CF1-ERROR]"'
+        labelExtractors:
+          message: EXTRACT(textPayload)
+      conditionDisplayName: "Log match condition"
+    enabled: true
+    notificationChannels:
+    - projects/proj-torg-security-prd-ypth/notificationChannels/3356634333094162231
+    - projects/proj-torg-security-prd-ypth/notificationChannels/2671652994074228735
+    - projects/proj-torg-security-prd-ypth/notificationChannels/13462200806725512589
+    projectId: proj-torg-security-prd-ypth
+    severity: ERROR
+
+  - alertPolicyName: ap-gcf-ca-log-event-02
+    resourceDeletionPolicy: Delete
+    alertStrategy:
+    - autoClose: 1800s
+      notificationRateLimit:
+      - period: 300s
+    combiner: OR
+    conditions:
+    - conditionMatchedLog:
+      - filter: 'resource.type="cloud_run_revision" AND textPayload:"[CF2-ERROR]"'
+        labelExtractors:
+          message: EXTRACT(textPayload)
+      conditionDisplayName: "Log match condition"
+    enabled: true
+    notificationChannels:
+    - projects/proj-torg-security-prd-ypth/notificationChannels/3356634333094162231
+    - projects/proj-torg-security-prd-ypth/notificationChannels/2671652994074228735
+    - projects/proj-torg-security-prd-ypth/notificationChannels/13462200806725512589
+    projectId: proj-torg-security-prd-ypth
+    severity: ERROR
+
+  - alertPolicyName: ap-gcf-ca-error-count-01
+    resourceDeletionPolicy: Delete
+    alertStrategy:
+    - autoClose: 86400s
+    combiner: OR
+    conditions:
+    - conditionThreshold:
+      - filter: 'resource.type="cloud_run_revision" AND metric.type="logging.googleapis.com/user/lm-gcf-ca-error-count-01"'
+        aggregations:
+        - alignmentPeriod: 600s
+          crossSeriesReducer: REDUCE_SUM
+          perSeriesAligner: ALIGN_SUM
+        comparison: COMPARISON_GT
+        duration: 0s
+        thresholdValue: 2
+        trigger:
+        - count: 1
+      conditionDisplayName: "Error log count"
+    enabled: true
+    notificationChannels:
+    - projects/proj-torg-security-prd-ypth/notificationChannels/3356634333094162231
+    - projects/proj-torg-security-prd-ypth/notificationChannels/2671652994074228735
+    - projects/proj-torg-security-prd-ypth/notificationChannels/13462200806725512589
+    projectId: proj-torg-security-prd-ypth
+    severity: ERROR
+
+  - alertPolicyName: ap-gcf-ca-error-count-02
+    resourceDeletionPolicy: Delete
+    alertStrategy:
+    - autoClose: 86400s
+    combiner: OR
+    conditions:
+    - conditionThreshold:
+      - filter: 'resource.type="cloud_run_revision" AND metric.type="logging.googleapis.com/user/lm-gcf-ca-error-count-02"'
+        aggregations:
+        - alignmentPeriod: 600s
+          crossSeriesReducer: REDUCE_SUM
+          perSeriesAligner: ALIGN_SUM
+        comparison: COMPARISON_GT
+        duration: 0s
+        thresholdValue: 2
+        trigger:
+        - count: 1
+      conditionDisplayName: "Error log count"
+    enabled: true
+    notificationChannels:
+    - projects/proj-torg-security-prd-ypth/notificationChannels/3356634333094162231
+    - projects/proj-torg-security-prd-ypth/notificationChannels/2671652994074228735
+    - projects/proj-torg-security-prd-ypth/notificationChannels/13462200806725512589
+    projectId: proj-torg-security-prd-ypth
+    severity: ERROR
