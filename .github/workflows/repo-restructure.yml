@@ -1,1 +1,29 @@
+name: Repo - Restructuring on commit
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'fldr-cf.yaml'
 
+jobs:
+  automate_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup python
+        uses : actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Update Directory Structure
+        run: python repo-structure.py
+      - name: Update fldr-cf.yaml
+        run: python env-setup.py fldr-cf
+      - name: Commit Changes
+        run: |
+          git config --global user.name 'Naveenkumar M'
+          git config --global user.email 'naveen9715568487@gmail.com'
+          git add .
+          git commit -am "Automated report"
+          git push origin master
