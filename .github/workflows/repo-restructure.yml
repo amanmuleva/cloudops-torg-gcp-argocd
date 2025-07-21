@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'fldr-cf.yaml'
 
 jobs:
   automate_job:
@@ -20,8 +22,8 @@ jobs:
         run: python env-setup.py fldr-cf
       - name: Commit Changes
         run: |
-          git config --global user.name 'Naveenkumar M'
-          git config --global user.email 'naveen9715568487@gmail.com'
+          git config --global user.name 'amanmuleva'
+          git config --global user.email 'aman.muleva@vonage.com'
           git add .
-          git commit -am "Automated report"
-          git push origin master
+          git commit -m "Automated repo-restructure"
+          git push origin main
