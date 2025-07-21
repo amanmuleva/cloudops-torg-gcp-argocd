@@ -1,6 +1,6 @@
 fldr-cf:
 - fldr-apps:
-  - proj-prod-app:
+  - proj-prod-app: []
   - proj-web-apps: []
   - proj-prod-apps: []
 - fldr-commercial:
