@@ -1,5 +1,6 @@
 fldr-cf:
-- fldr-apps: []
+- fldr-apps: 
+  - proj-web-apps:
 - fldr-commercial:
   - proj-nahmed-sbox: []
   - proj-nsarabu-sbox: []
