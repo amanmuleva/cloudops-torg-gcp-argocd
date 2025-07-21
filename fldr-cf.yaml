@@ -1,11 +1,11 @@
 fldr-cf:
-- fldr-management:
-  - proj-hosted-network: []
+- fldr-apps: []
 - fldr-commercial:
   - proj-nahmed-sbox: []
-  - proj-sbawane-sbox: []
   - proj-nsarabu-sbox: []
   - proj-rdwarkha-sbox: []
+  - proj-sbawane-sbox: []
 - fldr-security:
   - proj-security: []
-- fldr-apps:
+- fldr-management:
+  - proj-hosted-network: []
