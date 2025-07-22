@@ -4,8 +4,8 @@ fldr-cf:
   - proj-web-apps: []
   - proj-dev-app: []
   - proj-prod-apps: []
-- fldr-prod-db: 
-  - proj-db:
+- fldr-prod-db:
+  - proj-db: []
 - fldr-commercial:
   - proj-nahmed-sbox: []
   - proj-nsarabu-sbox: []
