@@ -2,8 +2,6 @@ name: Repo - Restructuring on commit
 on:
   push:
     branches: ['main']
-  pull_request:
-    branches: ['main']
     paths: ['fldr-cf.yaml']
 
 jobs:
