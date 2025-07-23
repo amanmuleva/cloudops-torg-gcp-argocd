@@ -45,7 +45,6 @@ jobs:
       env: 
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        BRANCH_NAME="auto/pr-branch-1"
         gh pr create \
           --title "Automated PR - Repo Structure Updated" \
           --body "This PR contains automatically restructured directory" \
