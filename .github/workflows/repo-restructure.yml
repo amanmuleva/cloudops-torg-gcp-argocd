@@ -26,10 +26,20 @@ jobs:
       run: python repo-structure.py
     - name: Update fldr-cf.yaml
       run: python env-setup.py fldr-cf
-    - name: Commit Changes
+    - name: Create PR Branch
       run: |
         git config --global user.name 'amanmuleva'
         git config --global user.email 'aman.muleva@vonage.com'
+        git checkout -b auto/pr-branch-${{ github.run_number }}
         git add .
         git commit -m "Automated repo-restructure"
-        git push origin main
+        git push origin auto/pr-branch-${{ github.run_number }}
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: "Automated PR - Repo Structure Updated"
+        body: "This PR contains restructure in the repo through fldr-cf.yaml."
+        base: main
+        head: auto/pr-branch-${{ github.run_number }}
+        
