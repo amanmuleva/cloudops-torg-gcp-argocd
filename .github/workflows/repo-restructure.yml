@@ -38,11 +38,12 @@ jobs:
         git commit -m "Automated repo-restructure"
         git push origin auto/pr-branch-1
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v7
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        title: "Automated PR - Repo Structure Updated"
-        body: "This PR contains restructure in the repo through fldr-cf.yaml."
-        base: main
-        head: auto/pr-branch-1
-        
+      env: 
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        BRANCH_NAME="auto/pr-branch-1"
+        gh pr create \
+          --title "Automated PR - Repo Structure Updated" \
+          --body "This PR contains automatically restructured directory" \
+          --head auto/pr-branch-1 \
+          --base main
