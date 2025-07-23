@@ -17,10 +17,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Use GH CLI
-      run: gh issue list
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -42,11 +38,11 @@ jobs:
         git commit -m "Automated repo-restructure"
         git push origin auto/pr-branch-1
     - name: Create Pull Request
-      env: 
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh pr create \
-          --title "Automated PR - Repo Structure Updated" \
-          --body "This PR contains automatically restructured directory" \
-          --head auto/pr-branch-1 \
-          --base main
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: "Automated PR - Repo Structure Updated"
+        body: "This PR contains restructure in the repo through fldr-cf.yaml."
+        base: main
+        head: auto/pr-branch-1
+      
