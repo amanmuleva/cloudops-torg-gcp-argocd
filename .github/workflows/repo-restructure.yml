@@ -3,6 +3,9 @@ on:
   push:
     branches: ['main']
     paths: ['fldr-cf.yaml']
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   automate_job:
@@ -30,10 +33,10 @@ jobs:
       run: |
         git config --global user.name 'amanmuleva'
         git config --global user.email 'aman.muleva@vonage.com'
-        git checkout -b auto/pr-branch-${{ github.run_number }}
+        git checkout -b auto/pr-branch-1
         git add .
         git commit -m "Automated repo-restructure"
-        git push origin auto/pr-branch-${{ github.run_number }}
+        git push origin auto/pr-branch-1
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
@@ -41,5 +44,5 @@ jobs:
         title: "Automated PR - Repo Structure Updated"
         body: "This PR contains restructure in the repo through fldr-cf.yaml."
         base: main
-        head: auto/pr-branch-${{ github.run_number }}
+        head: auto/pr-branch-1
         
