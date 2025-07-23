@@ -7,6 +7,7 @@ fldr-cf:
 - fldr-prod-db:
   - proj-db: []
   - proj-db-prod:
+  - proj-db-dev:
 - fldr-commercial:
   - proj-nahmed-sbox: []
   - proj-nsarabu-sbox: []
