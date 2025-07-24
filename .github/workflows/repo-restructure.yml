@@ -51,18 +51,12 @@ jobs:
           fi
 
       - name: Create Pull Request
-        if: steps.changes.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "Automated PR: Repo Structure Updated (Run #${{ github.run_number }})"
           body: |
             This PR contains automated restructuring based on fldr-cf.yaml.
-            
-            **Changes made:**
-            - Updated directory structure via repo-structure.py
-            - Updated fldr-cf.yaml via env-setup.py
-            
             Auto-generated on: ${{ github.event.head_commit.timestamp }}
           base: main
           branch: auto/pr-branch-${{ github.run_number }}
