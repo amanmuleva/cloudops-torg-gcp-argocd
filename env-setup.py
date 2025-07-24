@@ -12,6 +12,9 @@ def dir_to_dict(path):
             full_path = os.path.join(path, d)
             if os.path.isdir(full_path) and d not in ['root-app', 'templates', 'ca-gcf']:
                 directory[dn].append(dir_to_dict(full_path))
+
+        if not directory[dn]:
+            directory[dn] = None
     except Exception as e:
         print(f"Error reading {path}: {e}")
 
