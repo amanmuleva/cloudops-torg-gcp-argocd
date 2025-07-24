@@ -4,6 +4,7 @@ fldr-cf:
   - proj-web-apps: []
   - proj-dev-app: []
   - proj-prod-apps: []
+  - proj-db-prod-apps:
 - fldr-prod-db:
   - proj-db: []
   - proj-db-dev:
