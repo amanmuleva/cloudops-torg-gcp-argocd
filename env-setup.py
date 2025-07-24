@@ -14,7 +14,7 @@ def dir_to_dict(path):
                 directory[dn].append(dir_to_dict(full_path))
 
         if not directory[dn]:
-            directory[dn] = None
+            del directory[dn]
     except Exception as e:
         print(f"Error reading {path}: {e}")
 
