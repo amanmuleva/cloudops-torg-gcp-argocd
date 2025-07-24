@@ -28,3 +28,17 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+# Source of app for the proj-db-prod
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-db-prod
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+# Source of app for the proj-db-dev
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-db-dev
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
