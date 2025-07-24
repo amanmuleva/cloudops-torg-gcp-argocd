@@ -17,6 +17,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Show Git Diff
+      run: |
+        git diff --stat
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -36,6 +39,7 @@ jobs:
         git fetch origin
         git checkout -b auto/pr-branch-1
         git add .
+        git diff --cached --quiet && echo "No changes to commit" && exit 0
         git commit -m "Automated repo-restructure"
         git push origin auto/pr-branch-1
     - name: Create Pull Request
