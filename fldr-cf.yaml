@@ -1,16 +1,16 @@
 fldr-cf:
 - fldr-apps:
-  - proj-prod-app: []
-  - proj-web-apps: []
-  - proj-dev-app: []
+  - proj-prod-app
+  - proj-web-apps
+  - proj-dev-app
 - fldr-prod-db:
-  - proj-db: 
+  - proj-db
 - fldr-commercial:
-  - proj-nahmed-sbox: []
-  - proj-nsarabu-sbox: []
-  - proj-rdwarkha-sbox: []
-  - proj-sbawane-sbox: []
+  - proj-nahmed-sbox
+  - proj-nsarabu-sbox
+  - proj-rdwarkha-sbox
+  - proj-sbawane-sbox
 - fldr-security:
-  - proj-security: []
+  - proj-security
 - fldr-management:
-  - proj-hosted-network: []
+  - proj-hosted-network
