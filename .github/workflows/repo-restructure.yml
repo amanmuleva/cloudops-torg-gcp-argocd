@@ -68,12 +68,3 @@ jobs:
           branch: auto/pr-branch-${{ github.run_number }}
           commit-message: "Automated repo-restructure from fldr-cf.yaml (Run #${{ github.run_number }})"
           delete-branch: true
-
-      - name: PR Creation Result
-        if: steps.changes.outputs.has_changes == 'true'
-        run: |
-          echo "PR should have been created. Check the Actions logs above for any errors."
-          echo "If PR wasn't created, check:"
-          echo "1. Repository permissions"
-          echo "2. GITHUB_TOKEN permissions"
-          echo "3. Branch protection rules"
