@@ -5,20 +5,19 @@ import yaml
 def dir_to_dict(path):
     directory = {}
     dn = os.path.basename(path)
-    directory[dn] = []
+    subdirs = []
 
     try:
         for d in os.listdir(path):
             full_path = os.path.join(path, d)
             if os.path.isdir(full_path) and d not in ['root-app', 'templates', 'ca-gcf']:
-                directory[dn].append(dir_to_dict(full_path))
-
-        if not directory[dn]:
-            del directory[dn]
+                subdirs.append(dir_to_dict(full_path))
     except Exception as e:
         print(f"Error reading {path}: {e}")
-
-    return directory
+    if subdirs:
+        return {dn: subdirs}
+    else:
+        return dn
 
 if len(sys.argv) == 1:
     p = os.getcwd()
