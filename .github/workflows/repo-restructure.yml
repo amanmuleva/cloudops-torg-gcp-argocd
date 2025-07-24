@@ -16,10 +16,8 @@ jobs:
         python-version: ["3.12"]
 
     steps:
+    - name: Checkout Repository
     - uses: actions/checkout@v4
-    - name: Show Git Diff
-      run: |
-        git diff --stat
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -36,12 +34,11 @@ jobs:
       run: |
         git config --global user.name 'amanmuleva'
         git config --global user.email 'aman.muleva@vonage.com'
-        git fetch origin
-        git checkout -b auto/pr-branch-1
         git add .
         git diff --cached --quiet && echo "No changes to commit" && exit 0
-        git commit -m "Automated repo-restructure"
-        git push origin auto/pr-branch-1 --force
+    - name: Show Git Diff
+      run: |
+        git diff --stat
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
@@ -49,5 +46,6 @@ jobs:
         title: "Automated PR - Repo Structure Updated"
         body: "This PR contains restructure in the repo through fldr-cf.yaml."
         base: main
-        head: auto/pr-branch-1
+        branch: auto/pr-branch-${{ github.run_number }}
+        delete-branch: true
       
