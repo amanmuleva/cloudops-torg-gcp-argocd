@@ -33,6 +33,7 @@ jobs:
       run: |
         git config --global user.name 'amanmuleva'
         git config --global user.email 'aman.muleva@vonage.com'
+        git fetch origin
         git checkout -b auto/pr-branch-1
         git add .
         git commit -m "Automated repo-restructure"
