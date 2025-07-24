@@ -41,7 +41,7 @@ jobs:
         git add .
         git diff --cached --quiet && echo "No changes to commit" && exit 0
         git commit -m "Automated repo-restructure"
-        git push origin auto/pr-branch-1
+        git push origin auto/pr-branch-1 --force
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
