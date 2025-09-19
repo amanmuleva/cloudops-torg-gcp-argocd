@@ -10,8 +10,8 @@ fldr-cf:
 - fldr-commercial:
   - proj-sbawane-sbox
   - proj-nsarabu-sbox
+  - proj-amuleva-sbox
   - proj-rdwarkha-sbox
   - proj-nahmed-sbox
-  - proj-amuleva-sbox
 - fldr-management:
   - proj-hosted-network
