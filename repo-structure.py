@@ -164,10 +164,14 @@ def extract_folder_structure(data, root_folder="fldr-cf"):
                         # Process the list of project folders
                         for sub_item in value:
                             if isinstance(sub_item, dict):
+                                # Handle dictionary format (actual directory structure)
                                 for folder_name, folder_content in sub_item.items():
                                     # Only add the folder name (key) if it's not 'root-app'
                                     if folder_name != 'root-app':
                                         folder_structure[sub_folder].append(folder_name)
+                            elif isinstance(sub_item, str):
+                                # Handle string format (YAML configuration)
+                                folder_structure[sub_folder].append(sub_item)
     
     return folder_structure
 
