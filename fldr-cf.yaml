@@ -10,6 +10,7 @@ fldr-cf:
   - proj-nsarabu-sbox
   - proj-rdwarkha-sbox
   - proj-sbawane-sbox
+  - proj-test-sbox-1
 - fldr-security:
   - proj-security
 - fldr-management:
