@@ -49,3 +49,10 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+    # Source of app for the proj-test-sbox-1
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-test-sbox-1
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main

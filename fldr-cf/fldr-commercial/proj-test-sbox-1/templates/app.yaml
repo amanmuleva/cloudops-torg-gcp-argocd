@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: proj-test-sbox-1-{{ .Values.env }}
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: commercial-{{ .Values.env }}
+  sources:
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-central.git'
+      path: crossplane-templates/
+      targetRevision: main
+      helm:
+        values: |
+{{ .Values.configValues | indent 10 }}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: commercial-{{ .Values.env }}
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
