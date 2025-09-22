@@ -12,6 +12,6 @@ fldr-cf:
   - proj-nsarabu-sbox
   - proj-rdwarkha-sbox
   - proj-nahmed-sbox
-  - proj-amuleva-sbox-one
+  - proj-skip-sbox
 - fldr-management:
   - proj-hosted-network
