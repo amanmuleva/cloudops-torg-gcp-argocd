@@ -10,9 +10,9 @@ fldr-cf:
 - fldr-commercial:
   - proj-sbawane-sbox
   - proj-nsarabu-sbox
-  - proj-rdwarkha-sbox
-  - proj-nahmed-sbox
-  - proj-pleasedontskipit-sbox
   - proj-vbc-test-2
+  - proj-rdwarkha-sbox
+  - proj-pleasedontskipit-sbox
+  - proj-nahmed-sbox
 - fldr-management:
   - proj-hosted-network
