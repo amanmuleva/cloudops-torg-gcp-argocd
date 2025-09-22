@@ -49,3 +49,18 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+
+# Source of app for the proj-vbc-test-2
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-vbc-test-2
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
+# Source of app for the proj-pleasedontskipit-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-pleasedontskipit-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
