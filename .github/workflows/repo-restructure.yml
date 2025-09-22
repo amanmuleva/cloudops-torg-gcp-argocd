@@ -32,10 +32,10 @@ jobs:
           python -m pip install pyyaml
 
       - name: Update Directory Structure
-        run: python repo-structure.py
+        run: python .github/workflow/repo-structure.py
 
       - name: Update fldr-cf.yaml
-        run: python env-setup.py fldr-cf
+        run: python .github/workflow/env-setup.py fldr-cf
 
       - name: Check for changes
         id: changes
