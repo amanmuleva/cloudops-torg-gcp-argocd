@@ -49,3 +49,11 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+
+# Source of app for the proj-amuleva-sbox-one
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-amuleva-sbox-one
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
