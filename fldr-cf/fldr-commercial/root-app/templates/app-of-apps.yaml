@@ -49,3 +49,10 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+    # Source of app for the proj-vbc-test-2
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: fldr-cf/fldr-commercial/proj-vbc-test-2
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
