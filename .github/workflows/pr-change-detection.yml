@@ -20,10 +20,18 @@ jobs:
           # Fetch depth 0 is ESSENTIAL for git diff comparison
           fetch-depth: 0 
           
-      - name: Diff as Shell Output
+      - name: Diff for Push Event (Merged PR)
+        if: github.event_name == 'push'
         run: |
-          git diff --name-only "$GITHUB_BASE_REF" > changed_files.txt
-          ls -lh
+          # HEAD^ is the parent commit of the current HEAD. This is the 
+          # most reliable way to get the changes introduced by the merge commit.
+          # It compares the commit *before* the merge with the merge commit itself.
+          git diff --name-only HEAD^ HEAD > changed_files.txt
+          echo "::notice::Diffing Push: HEAD^..HEAD"
+          
+      - name: Display Changed Files
+        shell: bash
+        run: |
           cat changed_files.txt
 
       - name: List Files After Diff Action
