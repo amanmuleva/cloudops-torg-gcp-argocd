@@ -2,6 +2,8 @@ name: SAM Validate, Build, Test & Targeted Deploy
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -24,6 +26,11 @@ jobs:
         with:
           # Output the list of files to a specific file path
           files_only_output: changed_files.txt
+
+      - name: Display Changed Files
+        shell: bash
+        run: |
+          cat changed_files.txt
           
       - name: ⚙️ Process Diff to Find SAM Template Directories
         id: process-diff
