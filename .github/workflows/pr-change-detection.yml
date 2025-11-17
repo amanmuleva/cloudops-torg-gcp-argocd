@@ -24,8 +24,10 @@ jobs:
         uses: GrantBirki/git-diff-action@v2.8.1
         id: git-diff-action
         with:
-          # Output the list of files to a specific file path
           file_output_only: changed_files.txt
+
+      - name: List Files After Diff Action
+        run: ls -lh
 
       - name: Display Changed Files
         shell: bash
