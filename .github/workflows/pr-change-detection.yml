@@ -25,7 +25,7 @@ jobs:
         id: git-diff-action
         with:
           # Output the list of files to a specific file path
-          files_only_output: changed_files.txt
+          file_output_only: changed_files.txt
 
       - name: Display Changed Files
         shell: bash
