@@ -15,57 +15,44 @@ jobs:
     outputs:
       changed_dirs: ${{ steps.process-diff.outputs.changed_dirs }}
     steps:
-  - name: Checkout Repository
-    uses: actions/checkout@v4
-    with:
-      # Fetch depth 0 is ESSENTIAL for git diff comparison between branches/SHAs
-      fetch-depth: 0 
-      
-  - name: Calculate Dynamic Diff (PR or Push)
-    id: calculate-diff
-    run: |
-      DIFF_RANGE=""
-      
-      if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-        # For a PR, use the 3-dot diff syntax: BASE_SHA...HEAD_SHA. 
-        # This shows only the changes unique to the PR branch itself, 
-        # ignoring any commits that may have been merged into the base branch.
-        BASE_SHA="${{ github.event.pull_request.base.sha }}"
-        HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-        DIFF_RANGE="$BASE_SHA...$HEAD_SHA"
-        echo "::notice::Diffing PR: $DIFF_RANGE (3-dot comparison)"
-        
-      elif [[ "${{ github.event_name }}" == "push" ]]; then
-        # For a Push (after merge), use HEAD^...HEAD or HEAD^ HEAD.
-        # HEAD^ is the parent commit (the state of 'main' before the merge).
-        # This accurately isolates the changes introduced by the final merge commit.
-        DIFF_RANGE="HEAD^...HEAD"
-        echo "::notice::Diffing Push (Merged PR): $DIFF_RANGE"
-      fi
-      
-      # Execute the git diff using the determined range
-      git diff --name-only $DIFF_RANGE > changed_files.txt
-      
-      # Set DIFF_RANGE as an output for debugging purposes
-      echo "diff_range=$DIFF_RANGE" >> $GITHUB_OUTPUT
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch depth 0 is ESSENTIAL for git diff comparison between branches/SHAs
+          fetch-depth: 0 
+          
+      - name: Calculate Dynamic Diff (PR or Push)
+        id: calculate-diff
+        run: |
+          DIFF_RANGE=""
+          
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # For a PR, use the 3-dot diff syntax: BASE_SHA...HEAD_SHA. 
+            # This shows only the changes unique to the PR branch itself, 
+            # ignoring any commits that may have been merged into the base branch.
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            DIFF_RANGE="$BASE_SHA...$HEAD_SHA"
+            echo "::notice::Diffing PR: $DIFF_RANGE (3-dot comparison)"
+            
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            # For a Push (after merge), use HEAD^...HEAD or HEAD^ HEAD.
+            # HEAD^ is the parent commit (the state of 'main' before the merge).
+            # This accurately isolates the changes introduced by the final merge commit.
+            DIFF_RANGE="HEAD^...HEAD"
+            echo "::notice::Diffing Push (Merged PR): $DIFF_RANGE"
+          fi
+          
+          # Execute the git diff using the determined range
+          git diff --name-only $DIFF_RANGE > changed_files.txt
+          
+          # Set DIFF_RANGE as an output for debugging purposes
+          echo "diff_range=$DIFF_RANGE" >> $GITHUB_OUTPUT
 
-  - name: Display Changed Files
-    run: |
-      echo "--- Files Changed in the Latest Event ---"
-      cat changed_files.txt
-      
-  # This step should be implemented to process the changed_files.txt 
-  # and identify the root directories (e.g., SAM service folders) that need deployment.
-  - name: Process Diff and Find Service Directories
-    id: process-diff
-    # Dummy step - you would replace this logic with actual file parsing
-    # Example: looking for directories containing template.yaml
-    run: |
-      CHANGED_DIRS=$(cat changed_files.txt | grep template.yaml | xargs -n1 dirname | sort -u | jq -R . | jq -sc .)
-      echo "changed_dirs=$CHANGED_DIRS" >> $GITHUB_OUTPUT
-      echo "::notice::Detected deployment directories: $CHANGED_DIRS"
-      
-  # Add subsequent build/test/deploy jobs here, using needs.detect-changes.outputs.changed_dirs
+      - name: Display Changed Files
+        run: |
+          echo "--- Files Changed in the Latest Event ---"
+          cat changed_files.txt
           
       - name: ⚙️ Process Diff to Find SAM Template Directories
         id: process-diff
@@ -103,7 +90,7 @@ jobs:
           fi
           
           # Set the final output variable
-          echo "::set-output name=changed_dirs::$JSON_ARRAY"
+          echo "changed_dirs=$JSON_ARRAY" >> $GITHUB_OUTPUT
           echo "Found template directories for deployment: $JSON_ARRAY"
 
 #   sam-validate-build-test:
