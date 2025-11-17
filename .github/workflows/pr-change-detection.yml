@@ -20,11 +20,11 @@ jobs:
           # Fetch depth 0 is ESSENTIAL for git diff comparison
           fetch-depth: 0 
           
-      - name: 🔍 Detect Changed Files in the PR
-        uses: GrantBirki/git-diff-action@v2.8.1
-        id: git-diff-action
-        with:
-          file_output_only: changed_files.txt
+      - name: Diff as Shell Output
+        run: |
+          git diff --name-only "$GITHUB_BASE_REF" > changed_files.txt
+          ls -lh
+          cat changed_files.txt
 
       - name: List Files After Diff Action
         run: ls -lh
