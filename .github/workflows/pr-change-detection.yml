@@ -1,43 +1,43 @@
 on:
-    pull_request:
-        branches:
-            - main
-        types: [opened, synchronize, reopened]
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
 
 jobs:
-    git-check:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-              with: 
-                fetch-depth: 0
-                
-            - name: Check for changes in template.yaml
-              id: git-check
-              run: |
-                BASE_BRANCH="origin/${{ github.base_ref }}"
-                CURRENT_BRANCH="${{ github.head_ref }}"
-                
-                echo "BASE_BRANCH: $BASE_BRANCH"
-                echo "CURRENT_BRANCH: $CURRENT_BRANCH"
-                echo "Comparing: $BASE_BRANCH...${{ github.sha }}"
-                
-                # Check if template.yaml has changed
-                if git diff --name-only "$BASE_BRANCH"..."${{ github.sha }}" | grep -q "template.yaml"; then
-                  echo "template_changed=true" >> $GITHUB_OUTPUT
-                  echo "✅ template.yaml has been modified"
-                else
-                  echo "template_changed=false" >> $GITHUB_OUTPUT
-                  echo "ℹ️  template.yaml has not been modified"
-                fi
-                
-                # Show all changed files
-                echo ""
-                echo "📝 Changed files:"
-                git diff --name-status "$BASE_BRANCH"..."${{ github.sha }}"
-                
-                # Show detailed diff
-                echo ""
-                echo "📄 Full diff:"
-                git diff "$BASE_BRANCH"..."${{ github.sha }}"
+  git-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+          
+      - name: Check for changes in template.yaml
+        id: git-check
+        run: |
+          BASE_BRANCH="origin/${{ github.base_ref }}"
+          CURRENT_BRANCH="${{ github.head_ref }}"
+          
+          echo "BASE_BRANCH: $BASE_BRANCH"
+          echo "CURRENT_BRANCH: $CURRENT_BRANCH"
+          echo "Comparing: $BASE_BRANCH...${{ github.sha }}"
+          
+          # Check if template.yaml has changed
+          if git diff --name-only "$BASE_BRANCH"..."${{ github.sha }}" | grep -q "template.yaml"; then
+            echo "template_changed=true" >> $GITHUB_OUTPUT
+            echo "✅ template.yaml has been modified"
+          else
+            echo "template_changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  template.yaml has not been modified"
+          fi
+          
+          # Show all changed files
+          echo ""
+          echo "📝 Changed files:"
+          git diff --name-status "$BASE_BRANCH"..."${{ github.sha }}"
+          
+          # Show detailed diff
+          echo ""
+          echo "📄 Full diff:"
+          git diff "$BASE_BRANCH"..."${{ github.sha }}"
