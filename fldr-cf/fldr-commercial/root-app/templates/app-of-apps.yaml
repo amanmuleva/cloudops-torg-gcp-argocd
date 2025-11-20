@@ -71,3 +71,10 @@ spec:
         valueFiles:
           - {{ .Values.env }}.yaml
       targetRevision: main
+# Source of app for the proj-aman-sbox
+    - repoURL: 'git@github.com:vonage-atmos/cloudops-torg-gcp-argocd.git'
+      path: $TARGET_DIR/proj-aman-sbox
+      helm:
+        valueFiles:
+          - {{ .Values.env }}.yaml
+      targetRevision: main
