@@ -11,10 +11,10 @@ fldr-cf:
   - proj-rdwarkha-sbox
   - proj-vbc-prod
   - proj-nahmed-sbox
+  - proj-thiswillnotend
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
   - proj-pleasedontskipit-sbox
-  - proj-thiswillnotend
 - fldr-apps:
   - proj-dev-app
   - proj-prod-app
