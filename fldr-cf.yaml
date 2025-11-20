@@ -12,6 +12,7 @@ fldr-cf:
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
   - proj-pleasedontskipit-sbox
+  - proj-aman-sbox
 - fldr-apps:
   - proj-dev-app
   - proj-prod-app
