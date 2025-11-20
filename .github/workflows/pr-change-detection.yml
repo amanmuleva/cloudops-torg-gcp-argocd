@@ -1,204 +1,35 @@
-name: SAM Validate, Build, Test & Targeted Deploy
 on:
-  pull_request:
-    branches: [ main ]
-  push:
-    branches: [ main ]
-
-permissions:
-  contents: read
-  id-token: write # Required for OIDC/Web Identity if you switch to it
-
+    pull_request:
+        branches:
+            - main
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      changed_dirs: ${{ steps.process-diff.outputs.changed_dirs }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          # Fetch depth 0 is ESSENTIAL for git diff comparison between branches/SHAs
-          fetch-depth: 0 
-          
-      - name: Calculate Dynamic Diff (PR or Push)
-        id: calculate-diff
-        run: |
-          DIFF_RANGE=""
-          
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # For a PR, use the 3-dot diff syntax: BASE_SHA...HEAD_SHA. 
-            # This shows only the changes unique to the PR branch itself, 
-            # ignoring any commits that may have been merged into the base branch.
-            BASE_SHA="${{ github.event.pull_request.base.sha }}"
-            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-            DIFF_RANGE="$BASE_SHA...$HEAD_SHA"
-            echo "::notice::Diffing PR: $DIFF_RANGE (3-dot comparison)"
-            
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
-            # For a Push (after merge), use HEAD^...HEAD or HEAD^ HEAD.
-            # HEAD^ is the parent commit (the state of 'main' before the merge).
-            # This accurately isolates the changes introduced by the final merge commit.
-            DIFF_RANGE="HEAD^...HEAD"
-            echo "::notice::Diffing Push (Merged PR): $DIFF_RANGE"
-          fi
-          
-          # Execute the git diff using the determined range
-          git diff --name-only $DIFF_RANGE > changed_files.txt
-          
-          # Set DIFF_RANGE as an output for debugging purposes
-          echo "diff_range=$DIFF_RANGE" >> $GITHUB_OUTPUT
+    git-check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with: 
+                fetch-depth: 0
+            - name: Check for changes in template.yaml
+              id: git-check
+              run: |
+                BASE_BRANCH="${{ github.base_ref }}"
+                CURRENT_BRANCH="${{ github.head_ref }}"
 
-      - name: Display Changed Files
-        run: |
-          echo "--- Files Changed in the Latest Event ---"
-          cat changed_files.txt
-          
-      - name: ⚙️ Process Diff to Find SAM Template Directories
-        id: process-diff
-        shell: bash
-        run: |
-          # Install jq for JSON processing
-          sudo apt-get update && sudo apt-get install -y jq
-          
-          CHANGED_FILES=$(cat changed_files.txt)
-          echo "--- All changed files detected ---"
-          echo "$CHANGED_FILES"
-          echo "----------------------------------"
-          
-          # 1. Find all lines containing 'template.yaml' and extract their directory name.
-          # We use xargs dirname to correctly handle paths and sort -u for uniqueness.
-          CHANGED_TEMPLATES=$(echo "$CHANGED_FILES" | grep 'template\.yaml' | xargs -r dirname | sort -u)
-          
-          # 2. Check specifically for 'template.yaml' in the root directory
-          ROOT_TEMPLATE_CHANGED=$(echo "$CHANGED_FILES" | grep -E '^template\.yaml$' || true)
-          if [[ ! -z "$ROOT_TEMPLATE_CHANGED" ]]; then
-            # Add '.' for the root directory
-            if ! echo "$CHANGED_TEMPLATES" | grep -q '^.$'; then
-                CHANGED_TEMPLATES=".$CHANGED_TEMPLATES"
-            fi
-          fi
-          
-          # 3. Clean and convert the list into a GitHub Actions output JSON array
-          # The output must be a valid JSON array string for the matrix strategy.
-          CLEAN_TEMPLATES=$(echo "$CHANGED_TEMPLATES" | tr ' ' '\n' | grep -v '^\s*$' | sort -u)
+                echo "BASE_BRANCH: $BASE_BRANCH"
+                echo "CURRENT_BRANCH: $CURRENT_BRANCH"
+                git diff "$BASE_BRANCH"..."$CURRENT_BRANCH" > diff.txt
+                cat diff.txt
 
-          JSON_ARRAY="[]"
-          if [[ ! -z "$CLEAN_TEMPLATES" ]]; then
-            # jq -R reads input as raw strings, jq -s creates an array.
-            JSON_ARRAY=$(echo "$CLEAN_TEMPLATES" | jq -R . | jq -s .)
-          fi
-          
-          # Set the final output variable
-          echo "changed_dirs=$JSON_ARRAY" >> $GITHUB_OUTPUT
-          echo "Found template directories for deployment: $JSON_ARRAY"
-
-#   sam-validate-build-test:
-#     needs: [detect-changes] # Ensure change detection runs first
-#     runs-on: ubuntu-latest
-#     outputs:
-#       env-name: ${{ steps.vars.outputs.environment }}
-#       region: ${{ steps.vars.outputs.region }}
-#       bucket_name: ${{ steps.vars.outputs.bucket_name }}
-#     steps:
-#       - uses: actions/checkout@v4
-#       - name: Install Dependencies with Apt Get (incl. SAM CLI)
-#         run: |
-#           sudo apt-get update
-#           # Install Python 3.8 and jq as originally requested, and install the latest SAM CLI
-#           sudo apt-get install python3.8 jq -y
-#           pip3 install awscli aws-sam-cli
-#       - name: Install Pip Dependencies
-#         run: |
-#           pip3 install pytest
-          
-#       - name: Configure AWS credentials
-#         id: creds
-#         uses: aws-actions/configure-aws-credentials@v4 # Updated to v4
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
-          
-#       - name: SAM Validate (Root or Global)
-#         # Note: In a mono-repo, this may be better run against each changed template, 
-#         # but we keep the global validate for consistency with the initial request.
-#         run: sam validate
-        
-#       - name: Configure variables
-#         shell: bash
-#         id: vars
-#         env:
-#           REPO: ${{ github.repository }}
-#           REF: ${{ github.ref }}
-#         run: |
-#           BRANCH=${REF#refs/heads/}
-#           # Assuming config.json is in the root and contains {"region": "..."}
-#           REGION=$(cat ./config.json | jq -r .region)
-#           ENVIRONMENT=`echo $REPO | tr "/" "-"`
-#           # Creates a unique, branch-specific S3 bucket for SAM artifacts
-#           BUCKET_NAME=$(echo "$BRANCH-$ENVIRONMENT" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9\-' '-')
-          
-#           echo "::set-output name=environment::$ENVIRONMENT"
-#           echo "::set-output name=region::$REGION"
-#           echo "::set-output name=bucket_name::$BUCKET_NAME"
-          
-#       - name: SAM Build
-#         # Build ALL for validation or only the changed services. 
-#         # We keep 'sam build' global here, assuming it handles multiple templates.
-#         run: sam build
-        
-#       - name: Run unit tests
-#         run: |
-#           python3 -m pytest -s -vvv ./tests/unit/
-
-#   sam-deploy-changed:
-#     name: 🚀 Deploy Changed Services
-#     # Requires both previous jobs to succeed and provides the necessary variables/list
-#     needs: [detect-changes, sam-validate-build-test] 
-#     runs-on: ubuntu-latest
-    
-#     # 🌟 Matrix Strategy: Iterate over only the detected changes
-#     strategy:
-#       fail-fast: false # Allows other deployments to continue if one fails
-#       matrix:
-#         # Load the list of changed directories from the detect-changes job output
-#         template-dir: ${{ fromJson(needs.detect-changes.outputs.changed_dirs) }}
-
-#     steps:
-#       - uses: actions/checkout@v4
-      
-#       - name: Install SAM CLI
-#         run: pip3 install aws-sam-cli
-        
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v4
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
-
-#       - name: Deploy Service ${{ matrix.template-dir }}
-#         # Get variables from the sam-validate-build-test job
-#         env:
-#           ENV_NAME: ${{ needs.sam-validate-build-test.outputs.env-name }}
-#           REGION: ${{ needs.sam-validate-build-test.outputs.region }}
-#           BUCKET_NAME: ${{ needs.sam-validate-build-test.outputs.bucket_name }}
-#         run: |
-#           SERVICE_DIR="${{ matrix.template-dir }}"
-#           # Creates a unique stack name based on environment and service directory (e.g., repo-name-service-A)
-#           # We replace '.' with 'root' for the root template
-#           STACK_SUFFIX=$(echo "$SERVICE_DIR" | sed 's/\./root/g')
-#           STACK_NAME="$ENV_NAME-$STACK_SUFFIX"
-          
-#           echo "Deploying stack $STACK_NAME for service in $SERVICE_DIR"
-          
-#           # The template file must be relative to the service directory
-#           # The sam deploy command looks for the template within the path specified by the user 
-#           sam deploy \
-#             --template-file $SERVICE_DIR/template.yaml \
-#             --stack-name $STACK_NAME \
-#             --region $REGION \
-#             --s3-bucket $BUCKET_NAME \
-#             --capabilities CAPABILITY_IAM \
-#             --no-confirm-changeset # Disables interactive prompt
+    # deploy:
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - uses: actions/checkout@v3
+    #         - uses: actions/setup-python@v3
+    #         - uses: aws-actions/setup-sam@v2
+    #         - uses: aws-actions/configure-aws-credentials@v1
+    #           with:
+    #               aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #               aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #               aws-region: us-east-2
+    #         - run: sam build --use-container
+    #         - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
