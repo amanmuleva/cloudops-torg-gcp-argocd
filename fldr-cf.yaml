@@ -1,19 +1,19 @@
 fldr-cf:
+- fldr-apps:
+  - proj-prod-app
+  - proj-web-apps
+  - proj-dev-app
 - fldr-prod-db:
   - proj-db
 - fldr-security:
   - proj-security
 - fldr-commercial:
-  - proj-vbc-test-2
-  - proj-rdwarkha-sbox
-  - proj-vbc-prod
-  - proj-nahmed-sbox
-  - proj-nsarabu-sbox
   - proj-sbawane-sbox
+  - proj-nsarabu-sbox
+  - proj-rdwarkha-sbox
+  - proj-nahmed-sbox
   - proj-pleasedontskipit-sbox
-- fldr-apps:
-  - proj-dev-app
-  - proj-prod-app
-  - proj-web-apps
+  - proj-vbc-test-2
+  - proj-vbc-prod
 - fldr-management:
   - proj-hosted-network
