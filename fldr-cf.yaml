@@ -7,6 +7,7 @@ fldr-cf:
 - fldr-commercial:
   - proj-test
   - proj-vbc-test-2
+  - proj-please-work
   - proj-aman-sbox
   - proj-rdwarkha-sbox
   - proj-vbc-prod
@@ -15,7 +16,6 @@ fldr-cf:
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
   - proj-pleasedontskipit-sbox
-  - proj-please-work
 - fldr-apps:
   - proj-dev-app
   - proj-prod-app
