@@ -10,6 +10,7 @@ fldr-cf:
   - proj-nahmed-sbox
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
+  - proj-nexmo-sbox
   - proj-pleasedontskipit-sbox
 - fldr-apps:
   - proj-dev-app
