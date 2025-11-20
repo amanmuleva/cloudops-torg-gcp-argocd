@@ -5,6 +5,7 @@ fldr-cf:
   - proj-security
   - proj-nexmo-security
 - fldr-commercial:
+  - proj-test
   - proj-vbc-test-2
   - proj-aman-sbox
   - proj-rdwarkha-sbox
@@ -13,7 +14,6 @@ fldr-cf:
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
   - proj-pleasedontskipit-sbox
-  - proj-test
 - fldr-apps:
   - proj-dev-app
   - proj-prod-app
