@@ -187,7 +187,7 @@ spec:
         if chart_yaml_path.exists():
             with open(chart_yaml_path, 'r') as f:
                 content = f.read()
-            content = content.replace("root-app", proj_suffix_name)
+            content = content.replace("root", proj_suffix_name)
             with open(chart_yaml_path, 'w') as f:
                 f.write(content)
 
@@ -195,17 +195,28 @@ spec:
         
 def main():
     mismatches, missing_folders = compare_directories(actual_dirs, yaml_dirs)
+
+    # First, create any entirely missing folders (fldr-* with root-app)
+    if missing_folders:
+        create_missing_directories(missing_folders)
+
+        # After creating the folders, add them to actual_dirs with only 'root-app'
+        # so the second comparison picks up the missing projects inside them
+        for folder in missing_folders:
+            actual_dirs[folder] = ['root-app']
+
+        # Re-compare to detect missing projects inside newly created folders
+        mismatches, _ = compare_directories(actual_dirs, yaml_dirs)
+
     if mismatches:
         print("\nSummary of all mismatches:")
         for folder, missing_projects in mismatches.items():
-            # print(f"{folder}: {missing_projects}")
-            # Here we can add the code to create the missing directories in the actual directory structure
             repo_restructure(folder, missing_projects)
-            
     else:
         print("\nAll directories match!")
 
-    create_missing_directories(missing_folders)
+if __name__ == "__main__":
+    main()
     
 
 if __name__ == "__main__":
