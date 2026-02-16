@@ -1,0 +1,13 @@
+fldr-cf:
+- fldr-security:
+  - proj-security
+  - root-app
+- fldr-commercial:
+  - proj-rdwarkha-sbox
+  - proj-nahmed-sbox
+  - proj-nsarabu-sbox
+  - proj-sbawane-sbox
+  - root-app
+- fldr-management:
+  - proj-hosted-network
+  - root-app
