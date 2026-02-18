@@ -7,7 +7,11 @@ fldr-cf:
   - proj-nahmed-sbox
   - proj-nsarabu-sbox
   - proj-sbawane-sbox
+  - proj-aman-sbox
   - root-app
 - fldr-management:
   - proj-hosted-network
+  - root-app
+- fldr-databases:
+  - proj-data
   - root-app
