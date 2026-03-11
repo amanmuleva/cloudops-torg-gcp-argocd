@@ -15,3 +15,5 @@ fldr-cf:
 - fldr-databases:
   - proj-data
   - root-app
+- fldr-mongodb:
+  - proj-test-mongo
