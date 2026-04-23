@@ -17,3 +17,4 @@ fldr-cf:
   - root-app
 - fldr-mongodb:
   - proj-test-mongo
+  - proj-test-mongoAtlas
